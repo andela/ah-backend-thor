@@ -1,5 +1,6 @@
-import jwt
-import os
+
+import jwt, os
+
 from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.exceptions import APIException

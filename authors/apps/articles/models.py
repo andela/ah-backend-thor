@@ -45,3 +45,16 @@ class LikeArticle(models.Model):
 
     def __str__(self):
         return self.like_status
+
+class Report(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+    reported = models.BooleanField(default=False)
+    reason = models.CharField(max_length=200, blank=False)
+    reported_at = models.DateTimeField(auto_now_add=True)
+    
+    # user = User.objects.get(id=reporter)
+
+    def __str__(self):
+        return self.reason
+

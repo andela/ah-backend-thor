@@ -68,6 +68,7 @@ class TestPoll(APITestCase):
         response2 = self.client.post(
             self.social_authentication, self.atoken, format='json')
         self.assertEqual(response.status_code, 201)
+    
     def test_register_a_new_user(self):
         """test create new user when registering"""
         response = self.client.post(

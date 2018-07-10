@@ -1,4 +1,5 @@
-from .imports import *
+
+from .view_imports import *
 
 class ArticlesFilterSet(FilterSet):
     '''Filters articles based on author_name,title and tags of articles'''
@@ -20,6 +21,66 @@ class GetArticleBySlugApiView(generics.RetrieveAPIView):
     lookup_field = "slug"
 
 
+class ReportArticlesView(generics.GenericAPIView):
+    serializer_class = ArticleReportSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    renderer_class = ArticleReportsRenderer
+    lookup_field = 'pk'
+
+    util = Utils()
+
+    def post(self, request, *args, **kwargs):
+        article_pk = int(kwargs['pk'])
+        if not Article.objects.filter(pk=article_pk).exists():
+            raise APIException({
+                "error": f"Article with id:{article_pk} does not exist!"
+            })
+        
+        reason = request.data.get('reason')
+        
+        author_id = int(self.util.get_token(request))
+        
+        if Report.objects.filter(reporter=author_id).filter(article=article_pk).exists():
+            raise APIException({
+                "error": f"You have already reported Article: {article_pk}!"
+            })
+        article_data = Article.objects.get(pk=article_pk)
+        report_status_new = {
+            "article": article_pk,
+            "article_title": article_data.title,
+            "reported": True,
+            "reason": reason,
+            "reporter": author_id
+        }
+        
+        serializer = self.serializer_class(data=report_status_new)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        subject = f"Article :{article_pk} has been reported because :{reason}"
+        reported_article = Report.objects.get(article=article_pk)
+        
+        user = User.objects.get(pk=author_id)
+        body = f"reported at: {reported_article.reported_at}, reported by: {user.username}, because :{reported_article.reason}"
+        send_mail(subject, body, os.getenv("EMAIL"),
+                  [os.getenv("EMAIL")], fail_silently=False)
+        
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get(self, request, *args, **kwargs):
+        article_pk = int(kwargs['pk'])
+        if not Article.objects.filter(pk=article_pk).exists():
+            raise APIException({
+                "error": f"Article with id:{article_pk} does not exist!"
+            })
+        article_report = Report.objects.filter(article=article_pk)
+        if article_report.exists():
+            report_statuses = ArticleReportSerializer(article_report, many=True)
+            return Response(report_statuses.data, status=status.HTTP_200_OK)
+        return Response(json.dumps({
+            "error": f"Article: {article_pk}, has not been reported!"
+        }), status=status.HTTP_200_OK)
 
 class LikeArticlesView(generics.GenericAPIView):
     serializer_class = ArticleLikeSerializer
@@ -49,7 +110,7 @@ class LikeArticlesView(generics.GenericAPIView):
             "like_status": like_status,
             "user": author_id
         }
-
+        
         serializer = self.serializer_class(data=like_status_new)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -80,7 +141,6 @@ class LikeArticlesView(generics.GenericAPIView):
 
         try:
             current_like_status = LikeArticle.objects.get(article=article_pk)
-
         except:
             raise APIException({
                 "error": f"Article : {article_pk} has not been liked/disliked yet!"
@@ -89,7 +149,6 @@ class LikeArticlesView(generics.GenericAPIView):
         new_like_status = request.data.get(
             'like_status', current_like_status.like_status)
         user_ = User.objects.filter(id=author_id).first()
-
         if not LikeArticle.objects.filter(user=author_id).filter(article=article_pk).exists():
             raise APIException({
                 "error": f"Only {user_.username} can edit this!"

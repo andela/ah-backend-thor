@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
-from .models import Article, Rate, LikeArticle
+
+from .models import Article, Rate, LikeArticle, Report
+
 from authors.apps.authentication.models import User
 from .validation import Validator
 from rest_framework.validators import UniqueTogetherValidator
@@ -129,3 +131,22 @@ class ArticleLikesUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = LikeArticle
         fields = ['like_status']
+
+
+class ArticleReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = '__all__'
+
+    def to_representation(self, data):
+        '''Show article report details'''
+        report_details = super(ArticleReportSerializer, self).to_representation(data)
+        user = User.objects.get(pk=report_details['reporter']) or None
+        if user != None:
+            article_details = Article.objects.get(pk=report_details['article'])
+            report_details['article'] = article_details.slug
+            report_details['reporter'] = user.username
+            return report_details
+        return APIException({
+            'error': 'User does not exist'
+        })

@@ -145,8 +145,6 @@ The preferred JSON object to be returned by the API should be structured as foll
       "image": "https://i.stack.imgur.com/xHWG8.jpg",
       "following": false
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
   }],
   "commentsCount": 1
 }
@@ -154,21 +152,6 @@ The preferred JSON object to be returned by the API should be structured as foll
 
 ### List of Tags
 
-=======
-  }]
-=======
-  }],
-  "commentsCount": 1
->>>>>>> 525a817... Add comment count to multiple comments
-}
-```
-
-### List of Tags
-<<<<<<< HEAD
->>>>>>> 40573c4... Setup and add Basic Authentication
-=======
-
->>>>>>> 3265488... Ft user create comments 161382397 (#51)
 ```source-json
 {
   "tags": [
@@ -177,25 +160,10 @@ The preferred JSON object to be returned by the API should be structured as foll
   ]
 }
 ```
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 ### Errors and Status Codes
 
 If a request fails any validations, expect errors in the following format:
-=======
-### Errors and Status Codes
-<<<<<<< HEAD
-If a request fails any validations, expect a 422 and errors in the following format:
->>>>>>> 40573c4... Setup and add Basic Authentication
-=======
-=======
-
-### Errors and Status Codes
-
->>>>>>> 3265488... Ft user create comments 161382397 (#51)
-If a request fails any validations, expect errors in the following format:
->>>>>>> 76d5741... Updated error text
 
 ```source-json
 {
@@ -206,36 +174,16 @@ If a request fails any validations, expect errors in the following format:
   }
 }
 ```
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 ### Other status codes:
 
-=======
-### Other status codes:
->>>>>>> 40573c4... Setup and add Basic Authentication
-=======
-
-### Other status codes:
-
->>>>>>> 3265488... Ft user create comments 161382397 (#51)
 401 for Unauthorized requests, when a request requires authentication but it isn't provided
 
 403 for Forbidden requests, when a request may be valid but the user doesn't have permissions to perform the action
 
 404 for Not found requests, when a resource can't be found to fulfill the request
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 ## Endpoints:
-=======
-
-Endpoints:
-----------
->>>>>>> 40573c4... Setup and add Basic Authentication
-=======
-## Endpoints:
->>>>>>> 3265488... Ft user create comments 161382397 (#51)
 
 ### Authentication:
 
@@ -253,14 +201,7 @@ Example request body:
 ```
 
 No authentication required, returns a User
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> 40573c4... Setup and add Basic Authentication
-=======
-
->>>>>>> d92069b... Fixed typo
 Required fields: `email`, `password`
 
 ### Registration:
@@ -472,18 +413,8 @@ No additional parameters required
 
 `GET /api/tags`
 
-
-=======
 ### For team thor members about run the project on local machine
 create a .env file in the root of your project
 put the variables as shared
 source the .env file in the terminal
 and then you are set.
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-`\
-`
-=======
-
-

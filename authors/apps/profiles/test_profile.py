@@ -80,7 +80,6 @@ class TestProfile(APITestCase):
 
         res = self.client.get(self.user_profile_url, **
                               self.headers, format="json")
-
         self.assertEqual(res.status_code, 200)
 
     def test_retrive_userprofile_detail(self):

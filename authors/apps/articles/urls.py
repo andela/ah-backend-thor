@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import (ArticlesListCreateAPIView, LikeArticlesView,
+from .views import (ArticlesListCreateAPIView, LikeArticlesView, ReportArticlesView,
                     GetArticleBySlugApiView, RetrieveUpdateArticleByIdApiView,
                     RateCreateAPIView, RateRetrieveAPIView,
                     )
@@ -30,6 +30,8 @@ share_article_via_facebook = path(
     '<slug>/facebook', ShareArticleViaFacebookAPIView.as_view(), name='share_article_via_facebook')
 share_article_via_twitter = path(
     '<slug>/twitter', ShareArticleViaTwitterAPIView.as_view(), name='share_article_via_twitter')
+report_article_view = path(
+    '<int:pk>/report_status', ReportArticlesView.as_view(), name='report_article_view')
 
 urlpatterns = [
     list_create_articles,
@@ -40,5 +42,7 @@ urlpatterns = [
     view_article_like_status,
     share_article_via_email,
     share_article_via_facebook,
-    share_article_via_twitter
+    share_article_via_twitter,
+    report_article_view,
+    
 ]

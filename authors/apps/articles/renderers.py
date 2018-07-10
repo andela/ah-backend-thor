@@ -1,6 +1,8 @@
 import json
 from rest_framework.renderers import JSONRenderer
-from .models import Article, LikeArticle
+
+from .models import Article, LikeArticle, Report
+
 from rest_framework.utils.serializer_helpers import ReturnList, ReturnDict
 
 
@@ -40,3 +42,9 @@ class ArticleLikesRenderer:
     charset = 'utf-8'
     base.name = 'like_status'
     base.model = LikeArticle
+
+class ArticleReportsRenderer:
+    charset = 'utf-8'
+    base.name = 'reported'
+    base.model = Report
+
