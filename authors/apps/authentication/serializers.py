@@ -23,13 +23,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
     validators = [alphanumeric]
     )
 
+
     def validate_username(self,username):
         username_check = User.objects.filter(username=username)
         if username_check.exists():
             raise serializers.ValidationError('Username already taken')
         else:
             return username
-
 
     # token = serializers.CharField(max_length=255, read_only=True)
 

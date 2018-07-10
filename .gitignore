@@ -101,6 +101,7 @@ db.sqlite3
 .vscode/
 
 
+
 # migrations
 # authors/apps/authentication/migrations
 

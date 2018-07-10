@@ -46,9 +46,7 @@ INSTALLED_APPS = [
     'authors.apps.core',
     'authors.apps.profiles',
     'django_nose',
-
     'drf_yasg',
-
     'rest_framework_swagger'
 
 ]
@@ -95,7 +93,6 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
-
 
 DATABASES = {
     'default': {
@@ -178,4 +175,11 @@ NOSE_ARGS = [
 
 django_heroku.settings(locals())
 
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'andelateamthor@gmail.com'
+EMAIL_HOST_PASSWORD = 'team-thor-12345'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 

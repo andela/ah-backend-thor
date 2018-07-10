@@ -30,5 +30,6 @@ script:
   - COVERALLS_REPO_TOKEN="ujioY6o1FFgyYOEeb7Kl0O4yX06KxyLxe" coveralls
 
 after-success:
+
   - coveralls
 

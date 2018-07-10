@@ -6,6 +6,8 @@ from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer
 )
+from django.core.mail import send_mail
+
 import sendgrid
 import os
 from sendgrid.helpers.mail import *
@@ -31,21 +33,15 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        self.send(serializer.data['email'], serializer.data['token'])
+
+        body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(serializer.data['token'])
+        email = serializer.data['email']
+        send_mail('subject', body, 'andelateamthor@gmail.com', [email], fail_silently=False)
+        # self.send(serializer.data['email'], serializer.data['token'])
         return_data = serializer.data
         return_data.pop('token')
         # return Response(return_data, status=status.HTTP_201_CREATED)
         return Response({'message': 'User successfully Registered'}, status=status.HTTP_201_CREATED)
-    
-    def send(self, user_email, email_token):
-        sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
-        from_email = Email("john.kalyango@andela.com")
-        to_email = Email(user_email)
-        subject = "You have successfully"
-        content = Content("text/plain", "and easy to do anywhere, even with Python   http://localhost:8000/api/users/update/{}".format(email_token))
-        mail = Mail(from_email, subject, to_email, content)
-        response = sg.client.mail.send.post(request_body=mail.get())
-        print(response.status_code)
 
 
 class LoginAPIView(generics.CreateAPIView):
