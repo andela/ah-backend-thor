@@ -1,7 +1,7 @@
 ## Build Status
 [![Build Status](https://travis-ci.org/andela/ah-backend-thor.svg?branch=develop)](https://travis-ci.org/andela/ah-backend-thor)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3252fab55c9bb37768d7/maintainability)](https://codeclimate.com/github/andela/ah-backend-thor/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/andela/ah-backend-thor/badge.svg?branch=master)](https://coveralls.io/github/andela/ah-backend-thor?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/andela/ah-backend-thor/badge.svg?branch=develop)](https://coveralls.io/github/andela/ah-backend-thor?branch=develop)
 
 Authors Haven - A Social platform for the creative at heart.
 =======
@@ -398,6 +398,10 @@ No additional parameters required
 
 `GET /api/tags`
 
-
+### For team thor members about run the project on local machine
+create a .env file in the root of your project
+put the variables as shared
+source the .env file in the terminal
+and then you are set.
 
 
