@@ -83,6 +83,7 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+ah-backend-thor/
 
 # Spyder project settings
 .spyderproject
