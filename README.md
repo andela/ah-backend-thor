@@ -1,3 +1,5 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/3252fab55c9bb37768d7/maintainability)](https://codeclimate.com/github/andela/ah-backend-thor/maintainability)
+
 Authors Haven - A Social platform for the creative at heart.
 =======
 
