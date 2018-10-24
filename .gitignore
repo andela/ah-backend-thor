@@ -5,7 +5,8 @@ __pycache__/
 
 # C extensions
 *.so
-
+.vscode/
+migrations/
 # Distribution / packaging
 .Python
 env/
@@ -82,7 +83,6 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
-ah-backend-thor/
 
 # Spyder project settings
 .spyderproject
