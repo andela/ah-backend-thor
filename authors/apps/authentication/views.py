@@ -1,11 +1,20 @@
 from rest_framework import status
+from rest_framework import generics 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework.views import APIView
+
+from .backends import JWTAuthentication
+import jwt
+import sendgrid
+from authors.settings import SENDGRID_API_KEY, SECRET_KEY
+
+
 from .renderers import UserJSONRenderer
 from .serializers import (
-    LoginSerializer, RegistrationSerializer, UserSerializer
+    LoginSerializer, RegistrationSerializer, UserSerializer, PasswordSerializer
 )
+<<<<<<< HEAD
 from django.core.mail import send_mail
 
 import sendgrid
@@ -17,6 +26,16 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from .models import User
  
+=======
+from .models import User
+
+def generate_reset_token(data):
+        token = jwt.encode({
+            'email': data
+        }, SECRET_KEY, algorithm='HS256')
+
+        return token.decode('utf-8')
+>>>>>>> Revert "Develop (#13)" (#15)
 
 class RegistrationAPIView(generics.CreateAPIView):
     # Allow any user (authenticated or not) to hit this endpoint.
@@ -62,9 +81,15 @@ class LoginAPIView(generics.CreateAPIView):
         }
         return Response(message, status=status.HTTP_200_OK)
 
+<<<<<<< HEAD
+=======
+
+  
+>>>>>>> Revert "Develop (#13)" (#15)
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
+    authentication_classes = (JWTAuthentication,)
     serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):

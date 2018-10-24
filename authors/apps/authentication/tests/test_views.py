@@ -30,6 +30,9 @@ class TestPoll(APITestCase):
             }
         }
 
+        self.valid_email = {"user":{"email":"dude1@gmail.com"}}
+        self.invalid_email = {"user":{"email":""}}
+
     def test_register_a_new_user(self):
         """test create new user when registering"""
         response = self.client.post(
@@ -119,3 +122,28 @@ class TestPoll(APITestCase):
                               **headers, format='json')
         self.assertEqual(rev.status_code, 200)
 
+    def test_reset_password(self):
+        self.client.post('/api/users/', self.user, format = 'json')
+        response = self.client.post('/api/users/password_reset/', self.valid_email, format='json')
+        self.assertEqual(response.status_code, 201)
+
+    def test_reset_password_missing_email(self):
+        self.client.post('/api/users/', self.user, format = 'json')
+        response = self.client.post('/api/users/password_reset/', self.invalid_email, format='json')
+        self.assertEqual(response.status_code, 400)
+    
+    def test_change_password_missing_password(self):
+        self.invalid_password = {"new_password":""}
+        self.client.post('/api/users/', self.user, format = 'json')
+        self.res = self.client.post('/api/users/password_reset/', self.valid_email, format='json')
+        self.result = self.res.data['token']
+        response= self.client.put('/api/users/update_password/{}'.format(self.result), self.invalid_password, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_change_password(self):
+        self.valid_password = {"new_password":"newpassword"}
+        self.client.post('/api/users/', self.user, format = 'json')
+        self.res = self.client.post('/api/users/password_reset/', self.valid_email, format='json')
+        self.result = self.res.data['token'] 
+        response= self.client.put('/api/users/update_password/{}'.format(self.result), self.valid_password, format='json')
+        self.assertEqual(response.status_code, 201)
