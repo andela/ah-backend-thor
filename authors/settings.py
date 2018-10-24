@@ -147,15 +147,8 @@ CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',
     'localhost:4000',
 )
-SENDGRID_API_KEY = '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'
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'esthermukungu'
-# EMAIL_HOST_PASSWORD = 'mukungu@7'
-# EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = 'esther.namusisi@andela.com'
-# ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Email received from my website'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SENDGRID_API_KEY = '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'
+
  
 # Tell Django about the custom `User` model we created. The string
 # `authentication.User` tells Django we are referring to the `User` model in
