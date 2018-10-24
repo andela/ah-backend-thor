@@ -7,7 +7,6 @@ __pycache__/
 # migrations/
 # C extensions
 *.so
-.vscode
 # Distribution / packaging
 .Python
 env/
@@ -100,8 +99,12 @@ db.sqlite3
 # VScode and settings
 .vscode/
 
+
+# authors/apps/authentication/migrations/
+
 # migrations
-# authors/apps/authentication/migrations
+
+
 .DS_Store
 
 
