@@ -12,3 +12,4 @@ script:
 
 before_script:
   - python manage.py migrate
+
