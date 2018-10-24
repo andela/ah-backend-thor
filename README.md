@@ -1,3 +1,5 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/3252fab55c9bb37768d7/maintainability)](https://codeclimate.com/github/andela/ah-backend-thor/maintainability)
+
 Authors Haven - A Social platform for the creative at heart.
 =======
 
@@ -11,6 +13,7 @@ by leveraging the modern web.
 [![Build Status](https://travis-ci.com/malep2007/ah-backend-thor.svg?branch=develop)](https://travis-ci.com/malep2007/ah-backend-thor)
 
 [![Coverage Status](https://coveralls.io/repos/github/malep2007/ah-backend-thor/badge.svg?branch=ch-Integrate-Coveralls-161382386)](https://coveralls.io/github/malep2007/ah-backend-thor?branch=ch-Integrate-Coveralls-161382386)
+
 ## API Spec
 The preferred JSON object to be returned by the API should be structured as follows:
 
