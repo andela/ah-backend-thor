@@ -13,3 +13,4 @@ script:
 # send coverage report to coveralls
 after_success:
   coveralls
+
