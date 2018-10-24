@@ -98,3 +98,6 @@ db.sqlite3
 
 # migrations
 authors/apps/authentication/migrations/
+
+# editor config
+.editorconfig
