@@ -82,6 +82,7 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
 
+
 if os.environ.get('DJANGO_ENV') == 'Testing':
     DATABASES = {
         'default': {
@@ -99,6 +100,7 @@ else:
             'HOST': 'localhost' or 'ec2-107-20-211-10.compute-1.amazonaws.com',
             'PORT': '5432',
         }
+
 
 
 # Password validation
