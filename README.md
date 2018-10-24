@@ -9,6 +9,9 @@ by leveraging the modern web.
 
 ---
 
+## Build status
+[![Build Status](https://travis-ci.com/malep2007/ah-backend-thor.svg?branch=develop)](https://travis-ci.com/malep2007/ah-backend-thor)
+
 ## API Spec
 The preferred JSON object to be returned by the API should be structured as follows:
 
