@@ -9,3 +9,7 @@ install:
 # command to run tests
 script:
   - python manage.py test
+  - nosetests --with-coverage --cover-package=authors
+# send coverage report to coveralls
+after_success:
+  coveralls
