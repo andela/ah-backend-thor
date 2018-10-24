@@ -2,6 +2,7 @@ import jwt
 
 from django.conf import settings
 
+<<<<<<< HEAD
 from rest_framework import authentication, exceptions, request
 
 from .models import User
@@ -49,3 +50,5 @@ class JWTAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed(msg)
         
         return (user, token)
+=======
+>>>>>>> Develop (#13)
