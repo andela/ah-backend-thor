@@ -10,6 +10,8 @@ by leveraging the modern web.
 ## Build status
 [![Build Status](https://travis-ci.com/malep2007/ah-backend-thor.svg?branch=develop)](https://travis-ci.com/malep2007/ah-backend-thor)
 
+[![Coverage Status](https://coveralls.io/repos/github/malep2007/ah-backend-thor/badge.svg?branch=develop)](https://coveralls.io/github/malep2007/ah-backend-thor?branch=develop)
+
 ## API Spec
 The preferred JSON object to be returned by the API should be structured as follows:
 
