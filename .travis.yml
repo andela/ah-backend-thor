@@ -12,9 +12,6 @@ env:
 install:
   - pip install -r requirements.txt
 
-# before_script:
-#   - "python manage.py makemigrations"
-#   - "python manage.py migrate"
 # start postgres in travis
 services:
   - postgresql
