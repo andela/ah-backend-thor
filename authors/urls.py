@@ -41,7 +41,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
+
     path('swagger(P<format>.json|.yaml)',
          schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('documentation/', schema_view.with_ui('swagger',
@@ -52,9 +52,6 @@ urlpatterns = [
 
     path('', schema_view),
 
-=======
-    path('', schema_view),
->>>>>>> b1cfef2... [feature #161382391] Send verification email upon login
     path('api/', include(('authors.apps.authentication.urls',
                           'authors.apps.authentication'), namespace='authentication')),
 ]

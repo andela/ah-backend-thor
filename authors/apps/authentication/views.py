@@ -37,10 +37,8 @@ class RegistrationAPIView(generics.CreateAPIView):
         body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(serializer.data['token'])
         email = serializer.data['email']
         send_mail('subject', body, 'andelateamthor@gmail.com', [email], fail_silently=False)
-        # self.send(serializer.data['email'], serializer.data['token'])
         return_data = serializer.data
         return_data.pop('token')
-        # return Response(return_data, status=status.HTTP_201_CREATED)
         return Response({'message': 'User successfully Registered'}, status=status.HTTP_201_CREATED)
 
 
@@ -58,11 +56,13 @@ class LoginAPIView(generics.CreateAPIView):
         # handles everything we need.
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
+
         message = {
             'user_message':"User successfully confirmed",
             'user_token':serializer.data['token']
         }
         return Response(message, status=status.HTTP_200_OK)
+
 
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
