@@ -88,19 +88,17 @@ if os.environ.get('DJANGO_ENV') == 'Testing':
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
-    }
     
 else:
     DATABASES = {
         'default': {
-            
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'ah_backend', 
-            'USER': 'postgres',
-            'PASSWORD': '',
-            'HOST': 'localhost',
+            'NAME': 'ah_backend' or 'd8tsnl27l58vb7',
+            'USER': 'postgres' or 'xroopnzwkgzrvd',
+            'PASSWORD': '' or '0acbdff0e8f4398a826823d771d0e5bea0c3e510d91edfe1d7847e03405afa43',
+            'HOST': 'localhost' or 'ec2-107-20-211-10.compute-1.amazonaws.com',
             'PORT': '5432',
-        },
+        }
 
 
 # Password validation
