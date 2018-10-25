@@ -7,6 +7,9 @@ by leveraging the modern web.
 
 ---
 
+## Build status
+
+
 ## API Spec
 The preferred JSON object to be returned by the API should be structured as follows:
 
