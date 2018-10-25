@@ -1,3 +1,4 @@
+## Build Status
 [![Build Status](https://travis-ci.org/andela/ah-backend-thor.svg?branch=develop)](https://travis-ci.org/andela/ah-backend-thor)
 ===
 Authors Haven - A Social platform for the creative at heart.
