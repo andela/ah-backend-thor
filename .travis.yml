@@ -22,6 +22,11 @@ services:
 # create database
 before_script:
   - psql -c 'create database ah_backend;' -U postgres
+  - psql -c 'CREATE TABLE auth_group (
+      id SERIAL PRIMARY KEY,
+      name character varying(80) NOT NULL UNIQUE
+  );'
+  
   - psql -c 'CREATE TABLE authentication_user (
       id SERIAL PRIMARY KEY,
       password character varying(128) NOT NULL,
@@ -34,10 +39,7 @@ before_script:
       created_at timestamp with time zone NOT NULL,
       updated_at timestamp with time zone NOT NULL
   );'
-  - psql -c 'CREATE TABLE auth_group (
-      id SERIAL PRIMARY KEY,
-      name character varying(80) NOT NULL UNIQUE
-  );'
+  
   - python manage.py makemigrations
   - python manage.py migrate
 
