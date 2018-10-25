@@ -39,11 +39,21 @@ before_script:
   
   - python manage.py makemigrations
   - python manage.py migrate
+  env:
+    - DJANGO_ENV=Testing
 
 # command to run tests
 script:
+<<<<<<< HEAD
   - coverage run --source=authors manage.py test
   # - python manage.py test
 
 after-success:
   coveralls
+=======
+  - python manage.py test
+
+after_script:
+  env:
+    - DJANGO_ENV=Testing
+>>>>>>> [chore #161382384] Update tests and .travis.yml
