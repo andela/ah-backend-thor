@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#ignore migrations
+migrations/
 # C extensions
 *.so
 .vscode
