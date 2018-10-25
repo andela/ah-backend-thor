@@ -10,7 +10,7 @@ by leveraging the modern web.
 ---
 
 ## Build status
-https://travis-ci.org/andela/ah-backend-thor.svg?branch=fix-travis-ci-%23161382382
+[![Build Status](https://travis-ci.org/andela/ah-backend-thor.svg?branch=fix-travis-ci-%23161382382)](https://travis-ci.org/andela/ah-backend-thor)
 
 ## API Spec
 The preferred JSON object to be returned by the API should be structured as follows:
