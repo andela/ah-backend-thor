@@ -87,6 +87,7 @@ if os.environ.get('DJANGO_ENV') == 'Testing':
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+    
 else:
     DATABASES = {
         'default': {
