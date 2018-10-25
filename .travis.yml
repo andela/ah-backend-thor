@@ -12,4 +12,7 @@ before_script:
   - "python manage.py migrate"
 # command to run tests
 script:
-  - python manage.py test
+  - coverage run --source=authors manage.py test
+
+after-success:
+  coveralls

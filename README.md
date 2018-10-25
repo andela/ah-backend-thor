@@ -1,6 +1,7 @@
 ## Build Status
 [![Build Status](https://travis-ci.org/andela/ah-backend-thor.svg?branch=develop)](https://travis-ci.org/andela/ah-backend-thor)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3252fab55c9bb37768d7/maintainability)](https://codeclimate.com/github/andela/ah-backend-thor/maintainability)
+[![Build Status](https://travis-ci.org/joshNic/djangotest.svg?branch=master)](https://travis-ci.org/joshNic/djangotest)
 
 Authors Haven - A Social platform for the creative at heart.
 =======
