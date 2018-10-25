@@ -94,3 +94,12 @@ ah-backend-thor/
 
 # SQLite3
 db.sqlite3
+
+# VScode and settings
+.vscode/
+
+# migrations
+authors/apps/authentication/migrations/
+
+# editor config
+.editorconfig
