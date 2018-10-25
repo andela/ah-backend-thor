@@ -39,12 +39,13 @@ before_script:
   
   - python manage.py makemigrations
   - python manage.py migrate
- 
+  env:
+    - DJANGO_ENV=Testing
 
 # command to run tests
 script:
   - coverage run --source=authors manage.py test
-  # - python manage.py test
+  - python manage.py test
 
 after-success:
   - coveralls
@@ -52,4 +53,4 @@ after-success:
 
 after_script:
   env:
-    - DJANGO_ENV=Testing
+    - DJANGO_ENV=notTesting
