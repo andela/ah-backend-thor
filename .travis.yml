@@ -36,6 +36,10 @@ before_script:
       created_at timestamp with time zone NOT NULL,
       updated_at timestamp with time zone NOT NULL
   );'
+  - psql -c 'CREATE TABLE auth_group (
+      id SERIAL PRIMARY KEY,
+      name character varying(80) NOT NULL UNIQUE
+  );'
   - python manage.py makemigrations
   - python manage.py migrate
 
