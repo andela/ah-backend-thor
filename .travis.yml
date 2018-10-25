@@ -19,11 +19,14 @@ services:
 # create database
 before_script:
   - psql -c 'create database ah_backend;' -U postgres
+<<<<<<< HEAD
   - psql -c 'CREATE TABLE auth_group (
       id SERIAL PRIMARY KEY,
       name character varying(80) NOT NULL UNIQUE
   );'
   
+=======
+>>>>>>> [chore #161382384] Modify .travis.yml
   - psql -c 'CREATE TABLE authentication_user (
       id SERIAL PRIMARY KEY,
       password character varying(128) NOT NULL,
