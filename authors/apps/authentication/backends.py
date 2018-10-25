@@ -7,4 +7,5 @@
 # from .models import User
 
 """Configure JWT Here"""
-
+class JWTAuthentication:
+    pass
