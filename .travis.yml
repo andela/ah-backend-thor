@@ -34,7 +34,13 @@ before_script:
   
   - python manage.py makemigrations
   - python manage.py migrate
+  env:
+    - DJANGO_ENV=Testing
 
 # command to run tests
 script:
   - python manage.py test
+
+after_script:
+  env:
+    - DJANGO_ENV=Testing
