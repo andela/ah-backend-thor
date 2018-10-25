@@ -36,7 +36,6 @@ before_script:
       created_at timestamp with time zone NOT NULL,
       updated_at timestamp with time zone NOT NULL
   );'
-  
   - python manage.py makemigrations
   - python manage.py migrate
   env:
