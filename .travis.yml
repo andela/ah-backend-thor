@@ -22,8 +22,6 @@ services:
 # create database
 before_script:
   - psql -c 'create database ah_backend;' -U postgres
-  - python manage.py makemigrations
-  - python manage.py migrate
 
 # command to run tests
 script:
