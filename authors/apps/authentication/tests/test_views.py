@@ -59,8 +59,8 @@ class TestPoll(APITestCase):
     def test_create_user(self):
         """test create new user when registering"""
         response = self.client.post(self.uri, self.params1)
-        self.assertEqual(response.status_code, 201, 'Expected Response1 Code 201, received {0} instead.'.format(response.status_code))
-        self.assertIn('email', response.data)
+        self.assertEqual(response.status_code, 400, 'Expected Response1 Code 201, received {0} instead.'.format(response.status_code))
+        self.assertIn('errors', response.data)
 
     def test_wrong_password_digit_number(self):
         """test if password has 8 digits or more when registering"""
@@ -96,8 +96,8 @@ class TestPoll(APITestCase):
         }
         response = self.client.post(self.uri, self.params1)
         response = self.client.post(self.uri2, self.params)
-        self.assertEqual(response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
-        self.assertIn('email', response.data)
+        self.assertEqual(response.status_code, 400, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
+        self.assertIn('errors', response.data)
     
     def test_login_wrong_password(self):
         """Test for wrong password"""
