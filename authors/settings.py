@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1.2/settings/
 
 import os
 
+import django_heroku
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,7 +26,7 @@ SECRET_KEY = '7pgozr2jn7zs_o%i8id6=rddie!*0f0qy3$oy$(8231i^4*@u3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
 
 # Application definition
 
@@ -44,7 +46,21 @@ INSTALLED_APPS = [
     'authors.apps.core',
     'authors.apps.profiles',
     'django_nose',
+
+    'drf_yasg',
+
+    'rest_framework_swagger'
+
 ]
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,12 +96,18 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ah_backend' or 'd8tsnl27l58vb7',
+        'USER': 'postgres' or 'xroopnzwkgzrvd',
+        'PASSWORD': '' or 'kegz' or '0acbdff0e8f4398a826823d771d0e5bea0c3e510d91edfe1d7847e03405afa43',
+        'HOST': 'localhost' or 'ec2-107-20-211-10.compute-1.amazonaws.com',
+        'PORT': '5432',
+    },
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1.2/settings/#auth-password-validators
@@ -122,6 +144,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'staticfiles'
 
 CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',
@@ -150,5 +173,14 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=authors',
-    '--cover-tests'
+    '--cover-tests',
 ]
+
+django_heroku.settings(locals())
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'andelateamthor@gmail.com'
+EMAIL_HOST_PASSWORD = 'team-thor-12345'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
