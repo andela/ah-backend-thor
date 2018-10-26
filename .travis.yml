@@ -54,3 +54,4 @@ after-success:
 after_script:
   env:
     - DJANGO_ENV=notTesting
+
