@@ -80,16 +80,26 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ah_backend', 
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if os.environ.get('DJANGO_ENV') == 'Testing':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+    
+else:
+    DATABASES = {
+        'default': {
+            
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'ah_backend', 
+            'USER': 'postgres',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        },
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1.2/settings/#auth-password-validators
@@ -154,5 +164,5 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=authors',
-    '--cover-tests'
+    '--cover-tests',
 ]
