@@ -168,5 +168,9 @@ NOSE_ARGS = [
     '--cover-package=authors',
     '--cover-tests',
 ]
+<<<<<<< HEAD
 
 django_heroku.settings(locals())
+=======
+django_heroku.settings(locals())
+>>>>>>> b3c4845aded8f99161f3c88f1be0ada50b5ffc07
