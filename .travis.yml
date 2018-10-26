@@ -3,9 +3,22 @@ python:
   - "3.6"
   - "3.6-dev"  # 3.6 development branch
   - "3.7-dev"  # 3.7 development branch
+
+# environment variables
+env:
+  - DJANGO_ENV=Testing
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+
+# before_script:
+#   - "python manage.py makemigrations"
+#   - "python manage.py migrate"
 # command to run tests
 script:
-  - python manage.py test
+  - coverage run --source=authors manage.py test
+  # - python manage.py test
+
+after-success:
+  coveralls

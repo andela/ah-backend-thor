@@ -3,9 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#ignore migrations
+migrations/
 # C extensions
 *.so
-
+.vscode
 # Distribution / packaging
 .Python
 env/
@@ -92,3 +94,12 @@ ah-backend-thor/
 
 # SQLite3
 db.sqlite3
+
+# VScode and settings
+.vscode/
+
+# migrations
+authors/apps/authentication/migrations/
+
+# editor config
+.editorconfig
