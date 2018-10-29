@@ -30,6 +30,7 @@ class JwtTestCase( JWTAuthentication, TestCase):
             }
         }
         self.response = self.client.post(self.uri, self.params1, format='json')
+        User.objects.filter(email='kegz@gmail.com').update(is_active=True)
         self.response2 = self.client.post(self.uri2, self.params2, format='json')
         self.response3 = self.client.get(self.uri3, self.params2, format='json')
         self.token = self.response2.data['token']
@@ -40,7 +41,6 @@ class JwtTestCase( JWTAuthentication, TestCase):
 
     def test_user_can_get_token(self):
         
-        print(self.response)
         self.assertEqual(201, self.response.status_code)
         self.assertIn('token', self.response2.data)
         self.assertTrue('token' not in self.response.data)
