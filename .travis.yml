@@ -6,7 +6,13 @@ python:
 
 # environment variables
 env:
+
+  global:
+    - CC_TEST_REPORTER_ID=6d3379169de0e2a1a780f93c8f0545849b6227531f6f891b3da576b1ff24624c
+    - DJANGO_ENV=Testing
+  
   - DJANGO_ENV=Testing
+
 
 # command to install dependencies
 install:
@@ -45,7 +51,13 @@ before_script:
 # command to run tests
 script:
   - coverage run --source=authors manage.py test
+
   - python manage.py test
+
+  - COVERALLS_REPO_TOKEN="ujioY6o1FFgyYOEeb7Kl0O4yX06KxyLxe" coveralls
+
+  # - python manage.py test
+
 
 after-success:
   - coveralls
