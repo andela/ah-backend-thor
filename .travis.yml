@@ -1,0 +1,57 @@
+language: python
+python:
+  - "3.6"
+  - "3.6-dev"  # 3.6 development branch
+  - "3.7-dev"  # 3.7 development branch
+
+# environment variables
+env:
+  - DJANGO_ENV=Testing
+
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+
+# start postgres in travis
+services:
+  - postgresql
+
+# create database
+before_script:
+  - psql -c 'create database ah_backend;' -U postgres
+  - psql -c 'CREATE TABLE auth_group (
+      id SERIAL PRIMARY KEY,
+      name character varying(80) NOT NULL UNIQUE
+  );'
+  
+  - psql -c 'CREATE TABLE authentication_user (
+      id SERIAL PRIMARY KEY,
+      password character varying(128) NOT NULL,
+      last_login timestamp with time zone,
+      is_superuser boolean NOT NULL,
+      username character varying(255) NOT NULL UNIQUE,
+      email character varying(254) NOT NULL UNIQUE,
+      is_active boolean NOT NULL,
+      is_staff boolean NOT NULL,
+      created_at timestamp with time zone NOT NULL,
+      updated_at timestamp with time zone NOT NULL
+  );'
+  
+  - python manage.py makemigrations
+  - python manage.py migrate
+  env:
+    - DJANGO_ENV=Testing
+
+# command to run tests
+script:
+  - coverage run --source=authors manage.py test
+  - python manage.py test
+
+after-success:
+  - coveralls
+  - python manage.py test
+
+after_script:
+  env:
+    - DJANGO_ENV=notTesting
+
