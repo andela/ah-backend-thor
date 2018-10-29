@@ -4,7 +4,6 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/andela/ah-backend-thor/badge.svg?branch=ch-fix-coveralls-badge)](https://coveralls.io/github/andela/ah-backend-thor?branch=ch-fix-coveralls-badge)
 
-[![Coverage Status](https://coveralls.io/repos/github/andela/ah-backend-thor/badge.svg?branch=master)](https://coveralls.io/github/andela/ah-backend-thor?branch=develop)
 
 
 Authors Haven - A Social platform for the creative at heart.
