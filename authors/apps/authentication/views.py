@@ -6,7 +6,9 @@ from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer
 )
-
+import sendgrid
+import os
+from sendgrid.helpers.mail import *
 
 class RegistrationAPIView(generics.CreateAPIView):
     # Allow any user (authenticated or not) to hit this endpoint.
@@ -23,8 +25,21 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        self.send(serializer.data['email'])
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def send(self, user_email):
+        sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+        from_email = Email("john.kalyango@andela.com")
+        to_email = Email(user_email)
+        subject = "Author's haven email verification"
+        content = Content("text/plain", "You have successfully signed up click link to confirm registration   http://localhost:8000/admin/")
+        mail = Mail(from_email, subject, to_email, content)
+        response = sg.client.mail.send.post(request_body=mail.get())
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
 
 
 class LoginAPIView(generics.CreateAPIView):
