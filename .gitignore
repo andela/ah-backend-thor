@@ -97,6 +97,7 @@ db.sqlite3
 
 # editorconfig
 .editorconfig
+
 # VScode and settings
 .vscode/
 
@@ -104,3 +105,4 @@ db.sqlite3
 authors/apps/authentication/migrations/
 
 .DS_Store
+
