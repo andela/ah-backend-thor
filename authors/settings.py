@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'authors.apps.core',
     'authors.apps.profiles',
     'django_nose',
+    'rest_framework_swagger'
 ]
 
 MIDDLEWARE = [
