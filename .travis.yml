@@ -59,7 +59,7 @@ script:
 
 
 after-success:
-  - coveralls
+  coveralls
 
 
 
