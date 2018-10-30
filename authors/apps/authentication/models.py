@@ -101,6 +101,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     @property
+    def token(self):
+        return self.generate_jwt_token()
+
+    @property
     def get_full_name(self):
       """
       This method is required by Django for things like handling emails.
@@ -117,4 +121,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return self.username
 
+    def generate_jwt_token(self):
+        date_t = datetime.now() + timedelta(days=60)
+        token = jwt.encode({
+            'id': self.pk,
+            'exp': int(date_t.strftime('%s'))
+        }, settings.SECRET_KEY, algorith='HS256')
+
+        return token.decode('utf-8')
 
