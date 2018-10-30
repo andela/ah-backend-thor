@@ -83,6 +83,7 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
 
+
 # else:
 DATABASES = {
     'default': {
@@ -94,6 +95,7 @@ DATABASES = {
         'PORT': '5432',
     },
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1.2/settings/#auth-password-validators
