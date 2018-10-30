@@ -54,7 +54,6 @@ script:
 
   - COVERALLS_REPO_TOKEN="ujioY6o1FFgyYOEeb7Kl0O4yX06KxyLxe" coveralls
 
-  # - python manage.py test
 
 
 after-success:
