@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
 
 
-# else:
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -150,7 +150,7 @@ REST_FRAMEWORK = {
     'NON_FIELD_ERRORS_KEY': 'error',
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'authors.apps.authentication.backends.JWTAuthentication',
+        'authors.apps.authentication.backends.JWTAuthentication',
     ),
 }
 
