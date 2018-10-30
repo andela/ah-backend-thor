@@ -7,10 +7,9 @@ python:
 # environment variables
 env:
 
-  global:
-    - CC_TEST_REPORTER_ID=6d3379169de0e2a1a780f93c8f0545849b6227531f6f891b3da576b1ff24624c
+  # global:
+  #   - CC_TEST_REPORTER_ID=6d3379169de0e2a1a780f93c8f0545849b6227531f6f891b3da576b1ff24624c
     #- DJANGO_ENV=Testing
-  
   - DJANGO_ENV=Testing
 
 
