@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 #ignore migrations
-migrations/
+# migrations/
 # C extensions
 *.so
 .vscode
@@ -95,11 +95,14 @@ ah-backend-thor/
 # SQLite3
 db.sqlite3
 
+# editorconfig
+.editorconfig
 # VScode and settings
 .vscode/
 
-# migrations
-authors/apps/authentication/migrations/
+# authors/apps/authentication/migrations/
 
-# editor config
-.editorconfig
+.DS_Store
+
+
+
