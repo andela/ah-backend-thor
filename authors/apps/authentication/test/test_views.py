@@ -118,3 +118,21 @@ class TestPoll(APITestCase):
         '''Test for user updating their details'''
         response = self.client.post(self.uri3, self.params1)
         self.assertEqual(response.status_code, 403)
+
+    def test_reset_password(self):
+        self.data = {"user":{"email":"kegz@gmail.com"}}
+        self.client.post('/api/users/', self.params1, format = 'json')
+        response = self.client.post('/api/users/password_reset/', self.data, format='json')
+        self.assertEqual(response.status_code, 201)
+
+    def test_reset_password_missing_email(self):
+        self.data = {"user":{"email":""}}
+        self.client.post('/api/users/', self.params1, format = 'json')
+        response = self.client.post('/api/users/password_reset/', self.data, format='json')
+        self.assertEqual(response.status_code, 400)
+    
+    def test_change_password_missing_password(self):
+        self.data3 = {"user":{"password":""}}
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVubXVrdW5ndUBnbWFpbC5jb20ifQ.hhFJLQ5NU-aIU_tQHGkKYVA7ivJyym1eUQsHoO4lNQ4'
+        response= self.client.put('/api/users/update_password/{}'.format(token), self.data3, format='json')
+        self.assertEqual(response.status_code, 400)

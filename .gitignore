@@ -101,7 +101,6 @@ db.sqlite3
 .vscode/
 
 # authors/apps/authentication/migrations/
-
 .DS_Store
 
 

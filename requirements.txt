@@ -35,11 +35,14 @@ pycodestyle==2.4.0
 PyJWT==1.6.4
 pylint==2.1.1
 python-decouple==3.1
+python-http-client==1.2.3
 pytz==2018.5
 PyYAML==3.13
 requests==2.20.0
+sendgrid==2.2.1
 simplejson==3.16.0
 six==1.11.0
+smtpapi==0.3.1
 uritemplate==3.0.0
 urllib3==1.24
 whitenoise==4.1
