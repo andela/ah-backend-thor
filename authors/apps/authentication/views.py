@@ -46,7 +46,7 @@ class LoginAPIView(generics.CreateAPIView):
         }
         return Response(message, status=status.HTTP_200_OK)
 
-
+  
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)

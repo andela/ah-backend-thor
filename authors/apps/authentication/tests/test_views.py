@@ -114,3 +114,4 @@ class TestPoll(APITestCase):
         rev = self.client.put(self.get_user_url, new_user,
                               **headers, format='json')
         self.assertEqual(rev.status_code, 200)
+
