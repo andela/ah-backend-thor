@@ -5,8 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-.vscode/
-migrations/
+.vscode
 # Distribution / packaging
 .Python
 env/
@@ -83,6 +82,7 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+ah-backend-thor/
 
 # Spyder project settings
 .spyderproject
@@ -92,3 +92,12 @@ ENV/
 
 # SQLite3
 db.sqlite3
+
+# editorconfig
+.editorconfig
+# VScode and settings
+.vscode/
+
+# migrations
+# authors/apps/authentication/migrations/
+
