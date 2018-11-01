@@ -92,6 +92,7 @@ class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class EmailVerification(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     def get_queryset(self):
@@ -101,4 +102,5 @@ class EmailVerification(generics.ListCreateAPIView):
         
         return queryset
     serializer_class = UserSerializer
+
 
