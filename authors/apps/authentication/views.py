@@ -24,7 +24,6 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     def post(self, request):
         user = request.data.get('user', {})
-
         # The create serializer, validate serializer, save serializer pattern
         # below is common and you will see it a lot throughout this course and
         # your own work later on. Get familiar with it.
@@ -47,6 +46,23 @@ class RegistrationAPIView(generics.CreateAPIView):
         response = sg.client.mail.send.post(request_body=mail.get())
         print(response.status_code)
 
+<<<<<<< HEAD
+=======
+        self.send(serializer.data['email'], serializer.data['token'])
+        return_data = serializer.data
+        return_data.pop('token')
+        return Response(return_data, status=status.HTTP_201_CREATED)
+    
+    def send(self, user_email, email_token):
+        sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+        from_email = Email("john.kalyango@andela.com")
+        to_email = Email(user_email)
+        subject = "You have successfully"
+        content = Content("text/plain", "and easy to do anywhere, even with Python   http://localhost:8000/api/users/update/{}".format(email_token))
+        mail = Mail(from_email, subject, to_email, content)
+        response = sg.client.mail.send.post(request_body=mail.get())
+        print(response.status_code)
+>>>>>>> 40b63aa5d14eb8860bfb4d57628c3c53bae6ccf8
 
 
 class LoginAPIView(generics.CreateAPIView):

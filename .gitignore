@@ -109,4 +109,8 @@ db.sqlite3
 # editor config
 .editorconfig
 
+<<<<<<< HEAD
 
+=======
+sendgrid.env
+>>>>>>> 40b63aa5d14eb8860bfb4d57628c3c53bae6ccf8
