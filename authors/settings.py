@@ -46,8 +46,17 @@ INSTALLED_APPS = [
     'authors.apps.core',
     'authors.apps.profiles',
     'django_nose',
-    'rest_framework_swagger'
+    'drf_yasg',
 ]
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
