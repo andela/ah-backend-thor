@@ -11,6 +11,7 @@ class TestPoll(APITestCase):
         self.client = APIClient()
         self.uri = '/api/users/'
         self.uri2 = '/api/users/login/'
+        self.uri3 = '/api/user/'
         
         self.params1 = {
             "email": "kegz@gmail.com",
@@ -112,3 +113,8 @@ class TestPoll(APITestCase):
         response = self.client.post(self.uri2, self.params9)
         self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
         self.assertIn('errors', response.data)
+
+    def test_user_can_update(self):
+        '''Test for user updating their details'''
+        response = self.client.post(self.uri3, self.params1)
+        self.assertEqual(response.status_code, 403)
