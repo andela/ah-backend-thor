@@ -12,5 +12,4 @@ urlpatterns = [
     path('users/login/', LoginAPIView.as_view(), name='login'),
     path('users/update/<pk>', EmailVerification.as_view(), name="email_verification"),
 
-
 ]

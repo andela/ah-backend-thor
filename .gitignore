@@ -114,3 +114,9 @@ db.sqlite3
 
 sendgrid.env
 
+
+# editor config
+.editorconfig
+
+sendgrid.env
+
