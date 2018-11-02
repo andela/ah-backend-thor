@@ -9,112 +9,109 @@ class TestPoll(APITestCase):
         """Define the test client and other test variables."""
 
         self.client = APIClient()
-        self.uri = '/api/users/'
-        self.uri2 = '/api/users/login/'
-        self.uri3 = '/api/user/'
-        
-        self.params1 = {
-            "email": "kegz@gmail.com",
-            "username": "kegz",
-            "password": "1231234567"
-        }
-        self.params2 = {
-            "email": "kegz@gmail.com",
-            "username": "kegz",
-            "password": "1"
-        }
-        self.params3 = {
-            "email": "kegz@gmail.com",
-            "username": "kegz",
-            "password": "1231234567"
-        }
-        self.params4 = {
-            "email": "kegzgmail.com",
-            "username": "kegz",
-            "password": "1231234567"
-        }
-        self.params5 = {
-            "email": "kegz@gmail.com",
-            "username": "kegz",
-            "password": ""
-        }
-        self.params6 = {
-            "email": "kegz@gmail.com",
-            "username": "",
-            "password": "123456789"
-        }
-        self.params7 = {
-            "email": "",
-            "username": "kalyango",
-            "password": "123456789"
-        }
-        self.params8 = {
-            "email": "kegz@gmail.com",
-            "password": "123124567"
-        }
-        self.params9 = {
-            "email": "kegzgmail.com",
-            "password": "123456789"
+        self.register_url = '/api/users/'
+        self.login_url = '/api/users/login/'
+        self.get_user_url = '/api/user/'
+
+        self.user = {
+            "user": {
+                "username": "dude",
+                "email": "dude1@gmail.com",
+                "password": "password"
+            }
         }
 
-    def test_create_user(self):
+        self.invalid_user = {
+            "user": {
+                "username": "dude",
+                "email": "dude1gmail.com",
+                "password": "passwor"
+            }
+        }
+
+    def test_register_a_new_user(self):
         """test create new user when registering"""
-        response = self.client.post(self.uri, self.params1)
-        self.assertEqual(response.status_code, 400, 'Expected Response1 Code 201, received {0} instead.'.format(response.status_code))
-        self.assertIn('errors', response.data)
+        response = self.client.post(
+            self.register_url, self.user, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('User successfully Registered', response.data['message'])
 
-    def test_wrong_password_digit_number(self):
-        """test if password has 8 digits or more when registering"""
-        response = self.client.post(self.uri, self.params2)
-        self.assertEqual(response.status_code, 400, 'Expected Response2 Code 400, received {0} instead.'.format(response.status_code))
-        self.assertIn('errors', response.data)
+    def test_login_un_registered_user(self):
+        '''Test logging in an unregistered user '''
+        response = self.client.post(self.login_url, self.user, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('A user with this email and password was not found',
+                      response.data['errors']['error'][0])
 
-    def test_email_already_exists(self):
-        """Test if the password already exits"""
-        response = self.client.post(self.uri, self.params1)
-        response = self.client.post(self.uri, self.params3)
-        self.assertIn('errors', response.data)
+    def test_user_login(self):
+        '''Test registering a User and logging them in '''
+        response = self.client.post(
+            self.register_url, self.user, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('User successfully Registered', response.data['message'])
+        response = self.client.post(self.login_url, self.user, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('User successfully confirmed',
+                      response.data['user_message'])
 
-    def test_wrong_email(self):
-        """Test for wrong email"""
-        self.response = self.client.post(self.uri, self.params4)
-        self.assertIn('errors', self.response.data)
+    def test_registering_an_invalid_user(self):
+        '''Test registering an invalid user with wrong details '''
+        response = self.client.post(
+            self.register_url, self.invalid_user, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('Enter a valid email address',
+                      response.data['errors']['email'][0])
 
-    def test_missing_fields(self):
-        """Test for missing fields"""
-        response = self.client.post(self.uri, self.params5)
-        self.assertIn('errors', response.data)
-        response = self.client.post(self.uri, self.params6)
-        self.assertIn('errors', response.data)
-        response = self.client.post(self.uri, self.params7)
-        self.assertIn('errors', response.data)
+    def test_a_user_that_already_exits(self):
+        ''' Tests registering a user that already exists '''
+        response = self.client.post(
+            self.register_url, self.user, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('User successfully Registered', response.data['message'])
+        response = self.client.post(
+            self.register_url, self.user, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('user with this email already exists',
+                      response.data['errors']['email'][0])
 
-    def test_login(self):
-        """Test for logging in a user"""
-        self.params = {
-            "email": "kegz@gmail.com",
-            "password": "1231234567"
+    def test_get_a_user_after_register(self):
+        ''' Gets a registered user '''
+        response = self.client.post(
+            self.register_url, self.user, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('User successfully Registered', response.data['message'])
+        response = self.client.post(self.login_url, self.user, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('User successfully confirmed',
+                      response.data['user_message'])
+        token = response.data['user_token']
+        # self.assertIn('asasdas',token)
+        headers = {'HTTP_AUTHORIZATION': "Token " + f'{token}'}
+        rev = self.client.get(self.get_user_url, **headers, format='json')
+        self.assertEqual(rev.status_code, 200)
+        self.assertIn(
+            'dude1@gmail.com', rev.data['email'])
+
+    def test_update_a_registered_user_after_register(self):
+        ''' Gets a registered user '''
+        new_user = {
+            "user": {
+                "email": "chuckyz@gmail.com",
+                "username": "chuckyz"
+            }
         }
-        response = self.client.post(self.uri, self.params1)
-        response = self.client.post(self.uri2, self.params)
-        self.assertEqual(response.status_code, 400, 'Expected Response Code 200, received {0} instead.'.format(response.status_code))
-        self.assertIn('errors', response.data)
-    
-    def test_login_wrong_password(self):
-        """Test for wrong password"""
-        response = self.client.post(self.uri, self.params1)
-        response = self.client.post(self.uri2, self.params8)
-        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
-        self.assertIn('errors', response.data)
+        response = self.client.post(
+            self.register_url, self.user, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('User successfully Registered', response.data['message'])
+        response = self.client.post(self.login_url, self.user, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('User successfully confirmed',
+                      response.data['user_message'])
+        token = response.data['user_token']
+        # self.assertIn('asasdas',token)
+        headers = {'HTTP_AUTHORIZATION': "Token " + f'{token}'}
+        rev = self.client.put(self.get_user_url, new_user,
+                              **headers, format='json')
+        self.assertEqual(rev.status_code, 200)
 
-    def test_login_wrong_email(self):
-        """Test for wrong email"""
-        response = self.client.post(self.uri, self.params1)
-        response = self.client.post(self.uri2, self.params9)
-        self.assertEqual(response.status_code, 400, 'Expected Response Code 400, received {0} instead.'.format(response.status_code))
-        self.assertIn('errors', response.data)
-
-    def test_user_can_update(self):
-        '''Test for user updating their details'''
-        response = self.client.post(self.uri3, self.params1)
-        self.assertEqual(response.status_code, 403)

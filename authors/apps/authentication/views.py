@@ -23,8 +23,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'message': 'User successfully Registered'}, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(generics.CreateAPIView):
@@ -41,10 +40,13 @@ class LoginAPIView(generics.CreateAPIView):
         # handles everything we need.
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
-        
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        message = {
+            'user_message':"User successfully confirmed",
+            'user_token':serializer.data['token']
+        }
+        return Response(message, status=status.HTTP_200_OK)
 
-
+  
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)

@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.core.validators import RegexValidator,ValidationError
 
 from rest_framework import serializers
 
@@ -10,11 +11,24 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     # Ensure passwords are at least 8 characters long, no longer than 128
     # characters, and can not be read by the client.
+    #validates the username to be alphanumeric
+    alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$','The username should be alphanumeric')
     password = serializers.CharField(
         max_length=128,
         min_length=8,
-        write_only=True
+        write_only=True,
     )
+    #validate username to be numbers and letters only
+    username = serializers.CharField(
+    validators = [alphanumeric]
+    )
+
+    def validate_username(self,username):
+        username_check = User.objects.filter(username=username)
+        if username_check.exists():
+            raise serializers.ValidationError('Username already taken')
+        else:
+            return username
 
     # token = serializers.CharField(max_length=255, read_only=True)
 
