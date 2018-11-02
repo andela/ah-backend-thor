@@ -101,10 +101,7 @@ db.sqlite3
 
 
 # authors/apps/authentication/migrations/
-
 # migrations
-
-
 .DS_Store
 
 
