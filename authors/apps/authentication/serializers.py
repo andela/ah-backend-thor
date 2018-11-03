@@ -23,7 +23,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
     validators = [alphanumeric]
     )
 
-
     def validate_username(self,username):
         username_check = User.objects.filter(username=username)
         if username_check.exists():
@@ -35,13 +34,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     # The client should not be able to send a token along with a registration
     # request. Making `token` read-only handles that for us.
-    token = serializers.CharField(max_length=255, read_only=True)
+
     class Meta:
         model = User
         # List all of the fields that could possibly be included in a request
         # or response, including fields specified explicitly above.
-        fields = ['email', 'username', 'password','token']
-        # extra_kwargs={"email":{"error_messages":{"required":"Am a customised error message", "email": "hihi"}}}
+        fields = ['email', 'username', 'password', 'token']
 
     def create(self, validated_data):
         # Use the `create_user` method we wrote earlier to create a new user.
