@@ -6,7 +6,17 @@ from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer
 )
+from django.core.mail import send_mail
 
+import sendgrid
+import os
+from sendgrid.helpers.mail import *
+
+import jwt
+from datetime import datetime, timedelta
+from django.conf import settings
+from .models import User
+ 
 
 class RegistrationAPIView(generics.CreateAPIView):
     # Allow any user (authenticated or not) to hit this endpoint.
@@ -23,6 +33,12 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        subject = "Hi {}".format(serializer.data['username'])
+        body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(serializer.data['token'])
+        email = serializer.data['email']
+        send_mail(subject, body, 'andelateamthor@gmail.com', [email], fail_silently=False)
+        return_data = serializer.data
+        return_data.pop('token')
         return Response({'message': 'User successfully Registered'}, status=status.HTTP_201_CREATED)
 
 
@@ -46,7 +62,6 @@ class LoginAPIView(generics.CreateAPIView):
         }
         return Response(message, status=status.HTTP_200_OK)
 
-  
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
@@ -70,5 +85,15 @@ class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class EmailVerification(generics.ListCreateAPIView):
+    serializer_class = UserSerializer
+    def get_queryset(self):
+        email_token = jwt.decode(self.kwargs["pk"], settings.SECRET_KEY, algorithm='HS256')
+        queryset = User.objects.filter(id=email_token['id'])
+        User.objects.filter(id=email_token['id']).update(is_active=True)
+        
+        return queryset
+    serializer_class = UserSerializer
+
