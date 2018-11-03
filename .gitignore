@@ -100,17 +100,9 @@ db.sqlite3
 # VScode and settings
 .vscode/
 
-
-
 # migrations
 # authors/apps/authentication/migrations
-
-# authors/apps/authentication/migrations/
-
-
 .DS_Store
 
-# editor config
-.editorconfig
 
-sendgrid.env
+

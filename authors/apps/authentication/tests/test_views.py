@@ -1,6 +1,5 @@
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-from ..models import User
 
 
 class TestPoll(APITestCase):
@@ -50,7 +49,6 @@ class TestPoll(APITestCase):
             self.register_url, self.user, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('User successfully Registered', response.data['message'])
-        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
         response = self.client.post(self.login_url, self.user, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertIn('User successfully confirmed',
@@ -82,7 +80,6 @@ class TestPoll(APITestCase):
             self.register_url, self.user, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('User successfully Registered', response.data['message'])
-        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
         response = self.client.post(self.login_url, self.user, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertIn('User successfully confirmed',
@@ -107,7 +104,6 @@ class TestPoll(APITestCase):
             self.register_url, self.user, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('User successfully Registered', response.data['message'])
-        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
         response = self.client.post(self.login_url, self.user, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertIn('User successfully confirmed',

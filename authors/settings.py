@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     'authors.apps.profiles',
     'django_nose',
     'drf_yasg',
-    'rest_framework_swagger'
-
 ]
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -94,13 +92,12 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ah_backend' or 'd8tsnl27l58vb7',
         'USER': 'postgres' or 'xroopnzwkgzrvd',
-        'PASSWORD': '' or 'kegz' or '0acbdff0e8f4398a826823d771d0e5bea0c3e510d91edfe1d7847e03405afa43',
+        'PASSWORD': '' or 'sudo'or '0acbdff0e8f4398a826823d771d0e5bea0c3e510d91edfe1d7847e03405afa43',
         'HOST': 'localhost' or 'ec2-107-20-211-10.compute-1.amazonaws.com',
         'PORT': '5432',
     },
@@ -173,12 +170,4 @@ NOSE_ARGS = [
     '--cover-package=authors',
     '--cover-tests',
 ]
-
 django_heroku.settings(locals())
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'andelateamthor@gmail.com'
-EMAIL_HOST_PASSWORD = 'team-thor-12345'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False

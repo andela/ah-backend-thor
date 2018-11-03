@@ -27,7 +27,6 @@ class JwtTestCase(JWTAuthentication, TestCase):
 
         self.response = self.client.post(
             self.register_url, self.user, format='json')
-        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
         self.user_login = self.client.post(
             self.login_url, self.user, format='json')
 
