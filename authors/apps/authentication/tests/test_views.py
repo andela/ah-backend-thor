@@ -1,5 +1,6 @@
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
+from ..models import User
 
 from ..models import User
 
@@ -77,9 +78,33 @@ class TestPoll(APITestCase):
         self.assertIn('user with this email already exists',
                       response.data['errors']['email'][0])
 
-
     def test_get_a_user_after_register(self):
         ''' Gets a registered user '''
+        response = self.client.post(
+            self.register_url, self.user, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('User successfully Registered', response.data['message'])
+        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
+        response = self.client.post(self.login_url, self.user, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('User successfully confirmed',
+                      response.data['user_message'])
+        token = response.data['user_token']
+        # self.assertIn('asasdas',token)
+        headers = {'HTTP_AUTHORIZATION': "Token " + f'{token}'}
+        rev = self.client.get(self.get_user_url, **headers, format='json')
+        self.assertEqual(rev.status_code, 200)
+        self.assertIn(
+            'dude1@gmail.com', rev.data['email'])
+
+    def test_update_a_registered_user_after_register(self):
+        ''' Gets a registered user '''
+        new_user = {
+            "user": {
+                "email": "chuckyz@gmail.com",
+                "username": "chuckyz"
+            }
+        }
         response = self.client.post(
             self.register_url, self.user, format='json')
         self.assertEqual(response.status_code, 201)
