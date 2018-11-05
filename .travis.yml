@@ -25,3 +25,4 @@ before_script:
 script:
   - coverage run --source=authors manage.py test
   - coveralls
+

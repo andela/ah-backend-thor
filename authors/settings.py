@@ -47,8 +47,7 @@ INSTALLED_APPS = [
     'authors.apps.profiles',
     'django_nose',
     'drf_yasg',
-
-
+    'authors.apps.articles'
 ]
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {

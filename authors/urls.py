@@ -47,5 +47,6 @@ urlpatterns = [
 
     path('api/', include(('authors.apps.authentication.urls',
                           'authors.apps.authentication'), namespace='authentication')),
-      
+    path('api/articles/', include(('authors.apps.articles.urls',
+                          'authors.apps.articles'), namespace='articles'))
 ]

@@ -1,5 +1,4 @@
-from rest_framework.test import APIClient
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient, APITestCase
 from ..models import User
 
 
