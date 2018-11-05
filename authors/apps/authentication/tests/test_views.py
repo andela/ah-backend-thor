@@ -30,12 +30,11 @@ class TestPoll(APITestCase):
             }
         }
 
-        self.valid_email = {"user":{"email":"dude1@gmail.com"}}
-        self.empty_email = {"user":{"email":""}}
+        self.valid_email = {"user": {"email": "dude1@gmail.com"}}
+        self.empty_email = {"user": {"email": ""}}
 
         self.send_password_reset_email = '/api/users/password_reset/'
         self.email_link = '/api/users/update_password/{}'
-        
 
     def test_register_a_new_user(self):
         """test create new user when registering"""
@@ -128,34 +127,40 @@ class TestPoll(APITestCase):
 
     def test_send_password_reset_email_valid_email(self):
         self.test_register_a_new_user()
-        response = self.client.post(self.send_password_reset_email, self.valid_email, format='json')
+        response = self.client.post(
+            self.send_password_reset_email, self.valid_email, format='json')
         print(response.data)
         self.assertEqual(response.status_code, 201)
-        self.assertIn('Check your email for the password reset link', response.data['message'])
+        self.assertIn('Check your email for the password reset link',
+                      response.data['message'])
 
     def test_send_password_reset_email_missing_email(self):
         self.test_register_a_new_user()
-        response = self.client.post(self.send_password_reset_email, self.empty_email, format='json')
+        response = self.client.post(
+            self.send_password_reset_email, self.empty_email, format='json')
         print(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertIn('Please fill in your email', response.data['message'])
-    
+
     def test_change_password_missing_password(self):
-        self.empty_password = {"new_password":""}
+        self.empty_password = {"new_password": ""}
         self.test_register_a_new_user()
-        self.res = self.client.post(self.send_password_reset_email, self.valid_email, format='json')
+        self.res = self.client.post(
+            self.send_password_reset_email, self.valid_email, format='json')
         self.token = self.res.data['token']
-        response= self.client.put(self.email_link.format(self.token), self.empty_password, format='json')
+        response = self.client.put(self.email_link.format(
+            self.token), self.empty_password, format='json')
         print(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertIn('Please fill in your password', response.data['message'])
 
     def test_change_password_valid_password(self):
-        self.valid_password = {"new_password":"newpassword"}
+        self.valid_password = {"new_password": "newpassword"}
         self.test_register_a_new_user()
-        self.res = self.client.post(self.send_password_reset_email, self.valid_email, format='json')
-        self.token = self.res.data['token'] 
-        response= self.client.put(self.email_link.format(self.token), self.valid_password, format='json')
+        self.res = self.client.post(
+            self.send_password_reset_email, self.valid_email, format='json')
+        self.token = self.res.data['token']
+        response = self.client.put(self.email_link.format(
+            self.token), self.valid_password, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('Password updated', response.data['message'])
-        
