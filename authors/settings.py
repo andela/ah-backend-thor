@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1.2to/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7pgozr2jn7zs_o%i8id6=rddie!*0f0qy3$oy$(8231i^4*@u3'
+SECRET_KEY = os.getenv("SECRETE_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'authors.apps.profiles',
     'django_nose',
     'drf_yasg',
+
+
 ]
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -92,12 +94,13 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ah_backend' or 'd8tsnl27l58vb7',
         'USER': 'postgres' or 'xroopnzwkgzrvd',
-        'PASSWORD': '' or 'sudo'or '0acbdff0e8f4398a826823d771d0e5bea0c3e510d91edfe1d7847e03405afa43',
+        'PASSWORD': '' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
         'HOST': 'localhost' or 'ec2-107-20-211-10.compute-1.amazonaws.com',
         'PORT': '5432',
     },
@@ -145,7 +148,16 @@ CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',
     'localhost:4000',
 )
-
+SENDGRID_API_KEY = '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'
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'esthermukungu'
+# EMAIL_HOST_PASSWORD = 'mukungu@7'
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'esther.namusisi@andela.com'
+# ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Email received from my website'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+ 
 # Tell Django about the custom `User` model we created. The string
 # `authentication.User` tells Django we are referring to the `User` model in
 # the `authentication` module. This module is registered above in a setting
@@ -170,4 +182,12 @@ NOSE_ARGS = [
     '--cover-package=authors',
     '--cover-tests',
 ]
+
 django_heroku.settings(locals())
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.getenv("EMAIL")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

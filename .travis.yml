@@ -1,7 +1,5 @@
 language: python
 python:
-  - "3.6"
-  - "3.6-dev"  # 3.6 development branch
   - "3.7-dev"  # 3.7 development branch
 
 # environment variables
@@ -25,10 +23,5 @@ before_script:
 
 # command to run tests
 script:
-  # - coverage run --source=authors manage.py test
-  - python manage.py test
-  - COVERALLS_REPO_TOKEN="ujioY6o1FFgyYOEeb7Kl0O4yX06KxyLxe" coveralls
-
-after-success:
+  - coverage run --source=authors manage.py test
   - coveralls
-
