@@ -15,12 +15,11 @@ from django.core.mail import send_mail
 import sendgrid
 import os
 
-
 import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
-from .models import User
 
+from .models import User
 
 def generate_password_reset_token(data):
         token = jwt.encode({
@@ -77,8 +76,6 @@ class LoginAPIView(generics.CreateAPIView):
         return Response(message, status=status.HTTP_200_OK)
 
 
-
-
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
@@ -94,15 +91,18 @@ class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         serializer_data = request.data.get('user', {})
-
         # Here is that serialize, validate, save pattern we talked about
         # before.
         serializer = self.serializer_class(
             request.user, data=serializer_data, partial=True
         )
+        
         serializer.is_valid(raise_exception=True)
+        
         serializer.save()
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
+
       
 class SendPasswordResetEmailAPIView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
