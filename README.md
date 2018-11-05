@@ -399,6 +399,12 @@ No additional parameters required
 
 `GET /api/tags`
 
+### For team thor members about run the project on local machine
+create a .env file in the root of your project
+put the variables as shared
+source the .env file in the terminal
+and then you are set.
+
 
 
 
