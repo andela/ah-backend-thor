@@ -5,6 +5,7 @@ omit =
     *urls*
     */python?.?/*
     *renderers*
+    *admin.py*
     *tests*
     */migrations/*
     *settings.py*
@@ -13,4 +14,5 @@ omit =
 
 
 show_missing= True
+
 
