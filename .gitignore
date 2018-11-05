@@ -7,7 +7,6 @@ __pycache__/
 # migrations/
 # C extensions
 *.so
-.vscode
 # Distribution / packaging
 .Python
 env/
