@@ -39,8 +39,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('documentation/', schema_view.with_ui('swagger',
-                                         cache_timeout=0), name='schema-swagger-ui'),
+                                               cache_timeout=0), name='schema-swagger-ui'),
     path('api/', include(('authors.apps.authentication.urls',
                           'authors.apps.authentication'), namespace='authentication')),
 ]
-

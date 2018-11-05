@@ -7,8 +7,6 @@ from rest_framework import authentication, exceptions, request
 from .models import User
 
 
-
-
 class JWTAuthentication(authentication.BaseAuthentication):
     authentication_header_prefix = 'Token'
 
@@ -26,11 +24,11 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
         if prefix.lower() != auth_header_prefix:
             return None
-        
+
         return self._authenticate_credentials(request, token)
 
     def _authenticate_credentials(self, request, token):
-        
+
         try:
             payload = jwt.decode(token, settings.SECRET_KEY)
 
@@ -47,5 +45,5 @@ class JWTAuthentication(authentication.BaseAuthentication):
         if not user.is_active:
             msg = 'This user has been deactivated.'
             raise exceptions.AuthenticationFailed(msg)
-        
+
         return (user, token)
