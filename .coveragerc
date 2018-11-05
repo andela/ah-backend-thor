@@ -12,7 +12,10 @@ omit =
     *models*
     *backends*
     *permissions*
-
+    *profiles/apps*
+    *profiles/admin*
+    *profiles/wsgi*
+    *authors/wsgi*
 
 
 show_missing= True
