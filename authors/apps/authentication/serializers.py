@@ -121,10 +121,17 @@ class UserSerializer(serializers.ModelSerializer):
         min_length=8,
         write_only=True
     )
-
+    bio = serializers.CharField(
+        max_length=128,
+        write_only=True
+    )
+    image = serializers.CharField(
+        max_length=128,
+        write_only=True
+    )
     class Meta:
         model = User
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'username', 'password', 'bio', 'image')
 
         # The `read_only_fields` option is an alternative for explicitly
         # specifying the field with `read_only=True` like we did for password
