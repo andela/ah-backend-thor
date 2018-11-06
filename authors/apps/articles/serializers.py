@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
-from .models import Article
+from .models import Article, Rate
 from authors.apps.authentication.models import User
 from .validation import Validator
+from rest_framework.validators import UniqueTogetherValidator
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -48,4 +49,40 @@ class ArticleUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['slug', 'title', 'description', 'body', 'tag_list', 'image_url', 'audio_url']
+
+class RateSerializer(serializers.ModelSerializer):
+
+    def validate(self, data):
+        rate = data.get('rate')
+        user = data.get('user')
+        article = data.get('article')
+
+        if rate is None:
+            raise serializers.ValidationError(
+                'A rating is required to vote for an article.'
+            )
+        if user is None:
+            raise serializers.ValidationError(
+                'Authentication credentials are missing'
+            )
+        if article is None:
+            raise serializers.ValidationError(
+                'The article to which you are voting is missing'
+            )
+        return {"rate": rate, "user":user, "article":article}
+    
+
+    class Meta:
+        model = Rate
+        fields = ('id','article','rate','user')
+        validators = [
+            UniqueTogetherValidator(
+                queryset = Rate.objects.all(),
+                fields = ('user', 'article')
+            )
+        ]
+
+    def create(self, validated_data):
+        rate = Rate.objects.create(**validated_data)
+        return rate
 

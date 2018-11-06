@@ -118,7 +118,7 @@ class SendPasswordResetEmailAPIView(generics.CreateAPIView):
 
         try:
             user_email = User.objects.get(email=user_data)
-
+            
             token = generate_password_reset_token(user_data)
 
             from_email = user_email
