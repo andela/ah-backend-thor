@@ -48,3 +48,4 @@ class ArticleUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['slug', 'title', 'description', 'body', 'tag_list', 'image_url', 'audio_url']
+

@@ -87,6 +87,7 @@ class ArticlesTest(APITestCase):
         self.response2 = self.client.post(
             login_url, self.login, format='json')
         self.token = self.response2.data['user_token']
+        
         self.headers = {'HTTP_AUTHORIZATION': f'Token {self.token}'}
 
         User.objects.filter(email="jude2jfg@fox.com").update(is_active=True)
@@ -139,6 +140,7 @@ class ArticlesTest(APITestCase):
         
         self.assertTrue(resp.status_code, 500)
         self.assertIn('error', resp.data)
+
 
     def test_user_can_get_article_bySlug(self):
         self.assertEqual(self.response6.status_code, 200)

@@ -1,3 +1,4 @@
+
 import json
 import re
 import time
@@ -12,6 +13,7 @@ from rest_framework.response import Response
 from .models import Article
 from .renderers import ArticlesRenderer
 from .serializers import ArticleSerializer, ArticleUpdateSerializer
+
 
 
 class ArticlesListCreateAPIView(generics.ListCreateAPIView):
@@ -70,6 +72,7 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
 
 
 class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     renderer_class = ArticlesRenderer
@@ -103,7 +106,6 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
                 serializer = ArticleUpdateSerializer(data=new_article)
                 serializer.is_valid(raise_exception=True)
                 serializer.update(article, new_article)
-                # serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return author_id
 
@@ -132,9 +134,11 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
         return author_id
 
 
+
 class GetArticleBySlugApiView(generics.RetrieveAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     renderer_class = ArticlesRenderer
     permissiion_classes = (permissions.AllowAny, )
     lookup_field = 'slug'
+
