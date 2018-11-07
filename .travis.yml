@@ -1,24 +1,27 @@
 language: python
 python:
-  - "3.6"
-  - "3.6-dev"  # 3.6 development branch
   - "3.7-dev"  # 3.7 development branch
 
 # environment variables
 env:
-  - DJANGO_ENV=Testing
+  global:
+    - CC_TEST_REPORTER_ID=6d3379169de0e2a1a780f93c8f0545849b6227531f6f891b3da576b1ff24624c
 
 # command to install dependencies
 install:
   - pip install -r requirements.txt
 
-# before_script:
-#   - "python manage.py makemigrations"
-#   - "python manage.py migrate"
+# start postgres in travis
+services:
+  - postgresql
+
+# create database
+before_script:
+  - psql -c 'create database ah_backend;' -U postgres
+  - python manage.py makemigrations
+  - python manage.py migrate
+
 # command to run tests
 script:
   - coverage run --source=authors manage.py test
-  # - python manage.py test
-
-after-success:
-  coveralls
+  - coveralls

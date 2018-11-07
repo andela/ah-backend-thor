@@ -1,0 +1,18 @@
+[report]
+
+omit = 
+    *__init__*
+    *urls*
+    */python?.?/*
+    *renderers*
+    *admin.py*
+    *tests*
+    */migrations/*
+    *settings.py*
+    *models*
+    *backends*
+
+
+show_missing= True
+
+

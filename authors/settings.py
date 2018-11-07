@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1.2/settings/
 
 import os
 
+import django_heroku
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,12 +21,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1.2to/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7pgozr2jn7zs_o%i8id6=rddie!*0f0qy3$oy$(8231i^4*@u3'
+SECRET_KEY = os.getenv("SECRETE_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
 
 # Application definition
 
@@ -44,7 +46,18 @@ INSTALLED_APPS = [
     'authors.apps.core',
     'authors.apps.profiles',
     'django_nose',
+    'drf_yasg',
+    'authors.apps.articles'
 ]
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,26 +93,18 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1.2/settings/#databases
 
-if os.environ.get('DJANGO_ENV') == 'Testing':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-    
-else:
-    DATABASES = {
-        'default': {
-            
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'ah_backend', 
-            'USER': 'postgres',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        },
-    }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ah_backend' or 'dajm14p7buvlsf',
+        'USER': 'postgres' or 'msmofsvmehybtc',
+        'PASSWORD': '' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
+        'HOST': 'localhost' or 'ec2-23-23-153-145.compute-1.amazonaws.com',
+        'PORT': '5432',
+    },
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1.2/settings/#auth-password-validators
@@ -136,12 +141,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'staticfiles'
 
 CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',
     'localhost:4000',
 )
-
+SENDGRID_API_KEY = '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'
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'esthermukungu'
+# EMAIL_HOST_PASSWORD = 'mukungu@7'
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'esther.namusisi@andela.com'
+# ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Email received from my website'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+ 
 # Tell Django about the custom `User` model we created. The string
 # `authentication.User` tells Django we are referring to the `User` model in
 # the `authentication` module. This module is registered above in a setting
@@ -153,7 +168,7 @@ REST_FRAMEWORK = {
     'NON_FIELD_ERRORS_KEY': 'error',
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'authors.apps.authentication.backends.JWTAuthentication',
+        'authors.apps.authentication.backends.JWTAuthentication',
     ),
 }
 
@@ -166,3 +181,12 @@ NOSE_ARGS = [
     '--cover-package=authors',
     '--cover-tests',
 ]
+
+django_heroku.settings(locals())
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.getenv("EMAIL")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
