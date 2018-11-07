@@ -49,8 +49,10 @@ INSTALLED_APPS = [
     'authors.apps.comments',
     'django_nose',
     'drf_yasg',
+
     'taggit',
     'taggit_serializer',
+
     'authors.apps.articles',
     'django.contrib.sites',
     'allauth',

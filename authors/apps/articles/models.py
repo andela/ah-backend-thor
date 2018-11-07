@@ -1,5 +1,4 @@
 from authors.apps.authentication.models import User
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from taggit.managers import TaggableManager
 
