@@ -28,5 +28,7 @@ class ModelTesCase(TestCase):
         self.assertEqual(self.res.username, 'kalyango')
         self.assertEqual(self.res.email, 'john@gmail.com')    
         
-    # def test_property(self):
-    #     self.assertEqual(User.objects.get_full_name(), 1)
+    def test_property(self):
+        self.assertTrue(User.get_full_name != None)
+        self.assertTrue(User.token != None)
+
