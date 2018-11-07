@@ -9,7 +9,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
-        # fields = ['slug', 'title', 'description', 'body', 'tag_list', 'image_url', 'audio_url']
 
     def to_representation(self, data):
         ''' Show article's actual details'''
@@ -44,3 +43,9 @@ class ArticleSerializer(serializers.ModelSerializer):
         for tag in tags:
             validator.letter_starts('tag', tag)
         return data
+
+class ArticleUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ['slug', 'title', 'description', 'body', 'tag_list', 'image_url', 'audio_url']
+

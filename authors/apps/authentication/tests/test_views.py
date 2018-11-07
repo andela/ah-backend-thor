@@ -128,7 +128,6 @@ class TestPoll(APITestCase):
         self.test_register_a_new_user()
         response = self.client.post(
             self.send_password_reset_email, self.valid_email, format='json')
-        print(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertIn('Check your email for the password reset link',
                       response.data['message'])
@@ -137,7 +136,6 @@ class TestPoll(APITestCase):
         self.test_register_a_new_user()
         response = self.client.post(
             self.send_password_reset_email, self.empty_email, format='json')
-        print(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertIn('Please fill in your email', response.data['message'])
 
@@ -149,7 +147,6 @@ class TestPoll(APITestCase):
         self.token = self.res.data['token']
         response = self.client.put(self.email_link.format(
             self.token), self.empty_password, format='json')
-        print(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertIn('Please fill in your password', response.data['message'])
 

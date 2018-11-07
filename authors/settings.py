@@ -97,10 +97,10 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ah_backend' or 'd8tsnl27l58vb7',
-        'USER': 'postgres' or 'xroopnzwkgzrvd',
+        'NAME': 'ah_backend' or 'dajm14p7buvlsf',
+        'USER': 'postgres' or 'msmofsvmehybtc',
         'PASSWORD': '' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
-        'HOST': 'localhost' or 'ec2-107-20-211-10.compute-1.amazonaws.com',
+        'HOST': 'localhost' or 'ec2-23-23-153-145.compute-1.amazonaws.com',
         'PORT': '5432',
     },
 }
