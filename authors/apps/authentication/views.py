@@ -23,6 +23,13 @@ from .models import User
 
 
 from .models import User
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from rest_auth.social_serializers import TwitterLoginSerializer
+from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter
+import facebook
 
 def generate_password_reset_token(data):
         token = jwt.encode({
@@ -167,3 +174,37 @@ class EmailVerification(generics.ListCreateAPIView):
 
         return queryset
     serializer_class = UserSerializer
+
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+    client_class = OAuth2Client
+    # serializer_class = SocialRegisterSerializer
+    # renderer_classes = (UserJSONRenderer,)
+
+    # def post(self, request):
+    #     data = json.loads(request.body.decode('utf-8'))
+    #     access_token = data.get('access_token')
+    #     try:
+    #         faceBookGraphApiExplorer = facebook.GraphAPI(access_token=access_token)
+    #         user_info = graph.get_object(
+    #             id='me',
+    #             fields='email, middle_name, last_name,'
+    #             'first_name')
+    #     except facebook.GraphAPIError:
+    #         return JsonResponse({'error': 'Invalid data'}, safe=False)
+    #     try:
+    #         user = User.objects.get(facebook_email=user_info.get('email'))
+    #     except User.DoesNotExist:
+    #         password = User.objects.make_random_password()
+    #         pass
+
+
+class TwitterLogin(SocialLoginView):
+    serializer_class = TwitterLoginSerializer
+    adapter_class = TwitterOAuthAdapter
+
+
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
+    client_class = OAuth2Client

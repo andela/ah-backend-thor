@@ -164,3 +164,10 @@ class UserSerializer(serializers.ModelSerializer):
 class PasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length= 255, required=True)
     
+# class SocialRegisterSerializer(RegistrationSerializer):
+#     def create(self, validated_data):
+
+#        user = User.objects.create_user(**validated_data)
+#        user.is_active = True
+#        user.save()
+#        return user

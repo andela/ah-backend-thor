@@ -47,7 +47,17 @@ INSTALLED_APPS = [
     'authors.apps.profiles',
     'django_nose',
     'drf_yasg',
-    'authors.apps.articles'
+    'authors.apps.articles',
+    'rest_framework.authtoken',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    'rest_auth',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.twitter',
+    'allauth.socialaccount.providers.google',
 ]
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -58,6 +68,7 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
