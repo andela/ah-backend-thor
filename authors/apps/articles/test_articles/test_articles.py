@@ -87,7 +87,7 @@ class ArticlesTest(APITestCase):
         self.response2 = self.client.post(
             login_url, self.login, format='json')
         self.token = self.response2.data['user_token']
-        
+
         self.headers = {'HTTP_AUTHORIZATION': f'Token {self.token}'}
 
         User.objects.filter(email="jude2jfg@fox.com").update(is_active=True)
@@ -105,7 +105,6 @@ class ArticlesTest(APITestCase):
         self.response6 = self.client.get(
             f'{articles_url}{slug}', format='json')
 
-
     def test_user_can_post_article(self):
         self.assertEqual(self.response4.status_code, 201)
         self.assertIn('id', self.response4.data)
@@ -114,8 +113,7 @@ class ArticlesTest(APITestCase):
 
     def test_user_can_get_article(self):
         self.assertEqual(self.response3.status_code, 200)
-        self.assertTrue( isinstance(self.response3.data, ReturnList))
-   
+
     def test_user_can_get_article_byId(self):
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
@@ -124,9 +122,9 @@ class ArticlesTest(APITestCase):
 
         response5 = self.client.get(
             f'{articles_url}{num}', format='json')
-        
+
         self.assertEqual(response5.status_code, 200)
-        self.assertTrue( isinstance(response5.data, ReturnDict))
+        self.assertTrue(isinstance(response5.data, ReturnDict))
 
     def test_user_post_badTitle(self):
         resp = self.client.post(
@@ -137,22 +135,22 @@ class ArticlesTest(APITestCase):
     def test_user_post_missing_fields(self):
         resp = self.client.post(
             articles_url, self.missing_fieilds, **self.headers, format='json')
-        
+
         self.assertTrue(resp.status_code, 500)
         self.assertIn('error', resp.data)
 
-
     def test_user_can_get_article_bySlug(self):
         self.assertEqual(self.response6.status_code, 200)
-        self.assertTrue( isinstance(self.response6.data, ReturnDict))
+        self.assertTrue(isinstance(self.response6.data, ReturnDict))
 
     def test_user_can_delete_article(self):
-        
+
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
 
         num = dict(resp.data)['id']
-        res = self.client.delete(f'{articles_url}{num}', **self.headers, format='json')
+        res = self.client.delete(
+            f'{articles_url}{num}', **self.headers, format='json')
         self.assertEqual(res.status_code, 200)
         self.assertIn('success', res.data)
 
@@ -163,15 +161,16 @@ class ArticlesTest(APITestCase):
                 "description": "Ever wonder how?",
                 "body": "It takes a Jacobian goat not cow",
                 "tag_list": ["cows", "training"]
-                
+
             }
         }
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
-        
+
         num = dict(resp.data)['id']
 
-        res = self.client.patch(f'{articles_url}{num}', data, **self.headers, format='json')
+        res = self.client.patch(
+            f'{articles_url}{num}', data, **self.headers, format='json')
         self.assertEqual(res.status_code, 200)
 
     def test_wrong_user_update_article(self):
@@ -181,24 +180,26 @@ class ArticlesTest(APITestCase):
                 "description": "Ever wonder how?",
                 "body": "It takes a Jacobian goat not cow",
                 "tag_list": ["cows", "training"]
-                
+
             }
         }
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
-        
+
         num = dict(resp.data)['id']
 
-        res = self.client.patch(f'{articles_url}{num}', data, **self.headers2, format='json')
+        res = self.client.patch(
+            f'{articles_url}{num}', data, **self.headers2, format='json')
         self.assertEqual(res.status_code, 500)
         self.assertIn('error', res.data)
 
     def test_wrong_user_can_delete_article(self):
-        
+
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
 
         num = dict(resp.data)['id']
-        res = self.client.delete(f'{articles_url}{num}', **self.headers2, format='json')
+        res = self.client.delete(
+            f'{articles_url}{num}', **self.headers2, format='json')
         self.assertEqual(res.status_code, 500)
         self.assertIn('error', res.data)
