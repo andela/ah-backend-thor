@@ -31,6 +31,7 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     validators=['flex'],
+
     public=True,
     permission_classes=(AllowAny,),
 )
@@ -51,4 +52,4 @@ urlpatterns = [
                                    'authors.apps.articles'), namespace='articles')),
     path('api/comments/', include(('authors.apps.comments.urls',
                                    'authors.apps.comments'), namespace='comments'))
-]
+

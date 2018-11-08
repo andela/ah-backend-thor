@@ -22,15 +22,12 @@ from django.conf import settings
 from .models import User
 
 
-from .models import User
-
-
 def generate_password_reset_token(data):
-    token = jwt.encode({
-        'email': data
-    }, settings.SECRET_KEY, algorithm='HS256')
+        token = jwt.encode({
+            'email': data
+        }, settings.SECRET_KEY, algorithm='HS256')
 
-    return token.decode('utf-8')
+        return token.decode('utf-8')
 
 
 class RegistrationAPIView(generics.CreateAPIView):
@@ -80,6 +77,8 @@ class LoginAPIView(generics.CreateAPIView):
         return Response(message, status=status.HTTP_200_OK)
 
 
+
+
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
@@ -104,19 +103,18 @@ class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
+      
 class SendPasswordResetEmailAPIView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
 
     def post(self, request):
-        # get user email
+        #get user email
         user_data = request.data['user']['email']
 
         if not user_data:
-            return Response({"message": "Please fill in your email"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":"Please fill in your email"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user_email = User.objects.get(email=user_data)
@@ -126,17 +124,15 @@ class SendPasswordResetEmailAPIView(generics.CreateAPIView):
             from_email = user_email
             to_email = [user_email]
             subject = "Password Reset Email Link"
-            message = "Follow this link to reset your passwword: http://localhost:8000/api/users/update_password/{}".format(
-                token)
+            message = "Follow this link to reset your passwword: http://localhost:8000/api/users/update_password/{}".format(token)
 
-            send_mail(subject, message, from_email,
-                      to_email, fail_silently=False)
+            send_mail(subject, message, from_email, to_email, fail_silently= False)
             return Response(
-                {'message': 'Check your email for the password reset link', "token": token}, status=status.HTTP_201_CREATED)
+                {'message':'Check your email for the password reset link', "token":token}, status=status.HTTP_201_CREATED)
         except:
-            return Response({'message': 'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-
+            return Response({'message':'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            
 class PasswordUpdateAPIView(generics.UpdateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PasswordSerializer
@@ -153,7 +149,6 @@ class PasswordUpdateAPIView(generics.UpdateAPIView):
             decode_token = jwt.decode(
                 token, settings.SECRET_KEY, algorithms=['HS256'])
             user = User.objects.get(email=decode_token['email'])
-
             user.set_password(new_password)
             user.save()
             return Response({'message': 'Password updated'}, status=status.HTTP_201_CREATED)

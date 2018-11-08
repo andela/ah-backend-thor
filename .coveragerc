@@ -12,7 +12,7 @@ omit =
     *models*
     *backends*
     *permissions*
-    *renderers*
+
 
 
 show_missing= True

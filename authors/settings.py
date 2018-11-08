@@ -158,6 +158,8 @@ SENDGRID_API_KEY = 'SG.k8hDzBQHSS2Kv6HOnQxwnw.hJZD71PxIb_hYQIyAIVWvsevudLh9KGtvR
 # ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Email received from my website'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+
+
 # Tell Django about the custom `User` model we created. The string
 # `authentication.User` tells Django we are referring to the `User` model in
 # the `authentication` module. This module is registered above in a setting
