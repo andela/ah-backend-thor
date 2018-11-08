@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'authors.apps.authentication',
     'authors.apps.core',
     'authors.apps.profiles',
+    'authors.apps.comments',
     'django_nose',
     'drf_yasg',
     'authors.apps.articles'
@@ -97,10 +98,10 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ah_backend' or 'dajm14p7buvlsf',
-        'USER': 'postgres' or 'msmofsvmehybtc',
-        'PASSWORD': '' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
-        'HOST': 'localhost' or 'ec2-23-23-153-145.compute-1.amazonaws.com',
+        'NAME': 'ah_backend' or 'd8tsnl27l58vb7',
+        'USER': 'postgres' or 'xroopnzwkgzrvd',
+        'PASSWORD': '' or 'sudo' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
+        'HOST': 'localhost' or 'ec2-107-20-211-10.compute-1.amazonaws.com',
         'PORT': '5432',
     },
 }
@@ -156,7 +157,9 @@ SENDGRID_API_KEY = 'SG.k8hDzBQHSS2Kv6HOnQxwnw.hJZD71PxIb_hYQIyAIVWvsevudLh9KGtvR
 # DEFAULT_FROM_EMAIL = 'esther.namusisi@andela.com'
 # ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Email received from my website'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
- 
+
+
+
 # Tell Django about the custom `User` model we created. The string
 # `authentication.User` tells Django we are referring to the `User` model in
 # the `authentication` module. This module is registered above in a setting

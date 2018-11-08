@@ -18,5 +18,5 @@ class Article(models.Model):
     audio_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
-        return self.title, self.body
+        return f"{self.title}, {self.body}"
 

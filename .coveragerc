@@ -11,6 +11,8 @@ omit =
     *settings.py*
     *models*
     *backends*
+    *permissions*
+
 
 
 show_missing= True
