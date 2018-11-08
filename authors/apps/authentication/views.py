@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework import generics 
+from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
@@ -21,8 +21,6 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from .models import User
 
-
-from .models import User
 
 def generate_password_reset_token(data):
         token = jwt.encode({
@@ -79,6 +77,8 @@ class LoginAPIView(generics.CreateAPIView):
         return Response(message, status=status.HTTP_200_OK)
 
 
+
+
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
@@ -132,28 +132,28 @@ class SendPasswordResetEmailAPIView(generics.CreateAPIView):
         except:
             return Response({'message':'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
             
-
+            
 class PasswordUpdateAPIView(generics.UpdateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PasswordSerializer
     look_url_kwarg = 'token'
 
     def update(self, request, *args, **kwargs):
-        #get token
+        # get token
         token = self.kwargs.get(self.look_url_kwarg)
         new_password = request.data.get('new_password')
 
         if not new_password:
-            return Response({"message":"Please fill in your password"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Please fill in your password"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            decode_token = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            decode_token = jwt.decode(
+                token, settings.SECRET_KEY, algorithms=['HS256'])
             user = User.objects.get(email=decode_token['email'])
-            
             user.set_password(new_password)
             user.save()
             return Response({'message': 'Password updated'}, status=status.HTTP_201_CREATED)
         except:
-            return Response({'message':'Update failed'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Update failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EmailVerification(generics.ListCreateAPIView):

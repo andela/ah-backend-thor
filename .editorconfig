@@ -1,0 +1,8 @@
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+"trimTrailingWhitespace":  true
+"files.insertFinalNewline": true
+"files.trimFinalNewlines": true
