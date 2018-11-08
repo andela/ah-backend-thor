@@ -5,11 +5,14 @@ omit =
     *urls*
     */python?.?/*
     *renderers*
+    *admin.py*
     *tests*
     */migrations/*
     *settings.py*
     *models*
     *backends*
+    *permissions*
+
 
 
 show_missing= True
