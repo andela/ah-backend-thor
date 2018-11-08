@@ -3,9 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#ignore migrations
+# migrations/
 # C extensions
 *.so
-
 # Distribution / packaging
 .Python
 env/
@@ -92,3 +93,23 @@ ah-backend-thor/
 
 # SQLite3
 db.sqlite3
+
+# editorconfig
+.editorconfig
+# VScode and settings
+.vscode/
+
+
+
+# migrations
+# authors/apps/authentication/migrations
+
+# authors/apps/authentication/migrations/
+
+
+.DS_Store
+
+# editor config
+.editorconfig
+
+sendgrid.env
