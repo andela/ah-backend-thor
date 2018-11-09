@@ -178,3 +178,4 @@ class EmailVerification(generics.ListCreateAPIView):
 
         return queryset
     serializer_class = UserSerializer
+

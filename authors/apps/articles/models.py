@@ -20,3 +20,12 @@ class Article(models.Model):
     def __str__(self):
         return f"{self.title}, {self.body}"
 
+
+class Rate(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name= 'article_id')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name= 'user_who_rated_article')
+    rate = models.IntegerField(default=0)
+
+    def __repr__(self):
+        return self.rate
+

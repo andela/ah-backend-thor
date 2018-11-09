@@ -1,7 +1,7 @@
 
 import json
 import re
-import time
+import time, jwt
 
 from authors.apps.authentication.models import User
 from authors.apps.core.utils.utils import Utils
@@ -9,12 +9,15 @@ from django.shortcuts import render
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from django.conf import settings
 
-from .models import Article
+from .models import Article, Rate
 from .renderers import ArticlesRenderer
-from .serializers import ArticleSerializer, ArticleUpdateSerializer
+from .serializers import ArticleSerializer, ArticleUpdateSerializer, RateSerializer
 
-
+def article_instance(param):
+    query_article = Article.objects.get(slug=param)
+    return query_article
 
 class ArticlesListCreateAPIView(generics.ListCreateAPIView):
     queryset = Article.objects.all()
@@ -141,4 +144,92 @@ class GetArticleBySlugApiView(generics.RetrieveAPIView):
     renderer_class = ArticlesRenderer
     permissiion_classes = (permissions.AllowAny, )
     lookup_field = 'slug'
+
+class RateCreateAPIView(generics.CreateAPIView):
+    permission_class = permissions.IsAuthenticatedOrReadOnly
+    serializer_class = RateSerializer
+    look_url_kwarg = 'slug'
+
+    def post(self, request, *args, **kwargs):
+        """ Add ratings to an article"""
+       
+        slug = self.kwargs.get(self.look_url_kwarg)
+        self.rate = request.data.get('rate')
+
+        if self.rate > 5:
+            return Response(
+                {
+                    "message":"Rating is only up to 5"
+                    },
+                status=status.HTTP_400_BAD_REQUEST)
+        #get id in token:
+        token = request.META.get('HTTP_AUTHORIZATION', ' ').split(' ')[1]
+        decode_token = jwt.decode(token, settings.SECRET_KEY, algorithm='HS256')
+        user_id = decode_token['id']
+
+        #avoid a question's author from voting
+        
+        queried_article = article_instance(slug)
+        if queried_article.author.id == user_id and queried_article.slug == slug:
+            return Response(
+                {
+                    "message":"You can not rate your article"
+                    },
+                status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.serializer_class(
+            data = {"rate":self.rate,"user":user_id,'article':queried_article.id})
+        serializer.is_valid(raise_exception=True)
+        serializer.save() 
+        
+        return Response(
+            {
+                "slug":queried_article.slug, "rating_details":serializer.data
+                },
+            status=status.HTTP_200_OK)
+
+
+class RateRetrieveAPIView(generics.RetrieveAPIView):
+    serializer_class = RateSerializer
+    look_url_kwarg = 'slug'
+
+    def get_queryset(self, *args, **kwargs):
+        """ Returns the rating objects for a particular aricle"""
+
+        slug = self.kwargs.get(self.look_url_kwarg)
+        print(slug)
+        queried_article = article_instance(slug)
+        
+        queryset = Rate.objects.filter(article=queried_article.id)
+
+        return queryset
+        
+    def retrieve(self, request, *args, **kwargs):
+        """ Returns tghe average of an article's ratings"""
+
+        slug = self.kwargs.get(self.look_url_kwarg)
+        
+        query = self.get_queryset(self.look_url_kwarg)
+        total_count = query.count()
+
+        queried_article = article_instance(slug)
+        total_rates = 0
+       
+        for rate in query:
+            rated  = rate.rate
+            total_rates += rated 
+        try:
+            av_rating = total_rates/total_count
+
+            return Response(
+                {
+                    "slug":queried_article.slug,"average_ratings": round(av_rating,0)
+                    },
+                status=status.HTTP_200_OK)
+        except:
+            return Response(
+                {
+                    "slug":queried_article.slug,"average_ratings": 0
+                    },
+                status=status.HTTP_200_OK)
 
