@@ -10,3 +10,9 @@ class Profile(models.Model):
     image = models.URLField(max_length=100, default="")
     following = models.BooleanField(default = False)
     updated_at = models.DateTimeField(auto_now=True)
+
+class FollowUser(models.Model):
+    following_username = models.CharField(max_length = 255)
+    followed_username = models.CharField(max_length = 255)
+    
+    

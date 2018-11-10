@@ -51,7 +51,9 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         subject = "Hi {}".format(serializer.data['username'])
-        body = "click this link to verify your account   https://ah-backend-thor.herokuapp.com/api/users/update/{}".format(
+        # body = "click this link to verify your account   https://ah-backend-thor.herokuapp.com/api/users/update/{}".format(
+        #     serializer.data['token'])
+        body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(
             serializer.data['token'])
         email = serializer.data['email']
         send_mail(subject, body, os.getenv("EMAIL"),
