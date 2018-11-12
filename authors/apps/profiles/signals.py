@@ -24,4 +24,3 @@ def make_profile(sender, instance, created, **kwargs):
         
     except AttributeError as e:
         return e
-            
