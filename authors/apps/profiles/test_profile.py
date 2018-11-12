@@ -29,7 +29,7 @@ class TestProfile(APITestCase):
         response = self.client.post(self.register_url, self.user, format="json")
         self.assertEqual(response.status_code, 201)
 
-        User.objects.filter(email="david@gmail.com").update(is_active=True)
+        User.objects.filter(email="david@gmail.com").update(is_verified=True)
         response = self.client.post(self.login_url, self.user, format="json")
         self.assertEqual(response.status_code, 200)
 

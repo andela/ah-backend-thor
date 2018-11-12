@@ -1,5 +1,6 @@
 from rest_framework.test import APIClient, APITestCase
 from ..models import User
+import os
 
 
 class TestPoll(APITestCase):
@@ -12,6 +13,12 @@ class TestPoll(APITestCase):
         self.register_url = '/api/users/'
         self.login_url = '/api/users/login/'
         self.get_user_url = '/api/user/'
+        self.social_authentication = '/api/rest-auth/facebook/'
+        self.token = {
+            "access_token": os.getenv("FB_RESPONSE_TOKEN")}
+        self.atoken = {
+            "access_token": os.getenv("FB_ACCESS_TOKEN")
+        }
 
         self.user = {
             "user": {
@@ -45,8 +52,24 @@ class TestPoll(APITestCase):
 
         self.send_password_reset_email = '/api/users/password_reset/'
         self.email_link = '/api/users/update_password/{}'
-
-
+    
+    def test_user_token_details(self):
+        response = self.client.post(
+            self.social_authentication, self.token, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            str(response.content, encoding='utf8'),
+            {'error': 'Invalid data'}
+        )
+    
+    def test_user_token_detail(self):
+        response = self.client.post(
+            self.social_authentication, self.atoken, format='json')
+        self.assertEqual(response.status_code, 201)
+        response2 = self.client.post(
+            self.social_authentication, self.atoken, format='json')
+        self.assertEqual(response.status_code, 201)
+        
     def test_register_a_new_user(self):
         """test create new user when registering"""
         response = self.client.post(
@@ -67,7 +90,7 @@ class TestPoll(APITestCase):
             self.register_url, self.user, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('User successfully Registered', response.data['message'])
-        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
+        User.objects.filter(email="dude1@gmail.com").update(is_verified=True)
         response = self.client.post(self.login_url, self.user, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertIn('User successfully confirmed',
@@ -99,7 +122,7 @@ class TestPoll(APITestCase):
             self.register_url, self.user, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('User successfully Registered', response.data['message'])
-        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
+        User.objects.filter(email="dude1@gmail.com").update(is_verified=True)
         response = self.client.post(self.login_url, self.user, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertIn('User successfully confirmed',
@@ -124,7 +147,7 @@ class TestPoll(APITestCase):
             self.register_url, self.user, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('User successfully Registered', response.data['message'])
-        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
+        User.objects.filter(email="dude1@gmail.com").update(is_verified=True)
         response = self.client.post(self.login_url, self.user, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertIn('User successfully confirmed',

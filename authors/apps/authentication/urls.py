@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import (
     LoginAPIView, RegistrationAPIView, UserRetrieveUpdateAPIView, EmailVerification,
-    SendPasswordResetEmailAPIView, PasswordUpdateAPIView
+    SendPasswordResetEmailAPIView, PasswordUpdateAPIView, FacebookLogin,
+    TwitterLogin, GoogleLogin
 )
 
 urlpatterns = [
@@ -16,5 +17,8 @@ urlpatterns = [
          name="send_password_reset_email"),
     path('users/update_password/<token>',
          PasswordUpdateAPIView.as_view(), name="update_password"),
+    path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
+    path('rest-auth/twitter/', TwitterLogin.as_view(), name='twitter_login'),
+    path('rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
 
 ]

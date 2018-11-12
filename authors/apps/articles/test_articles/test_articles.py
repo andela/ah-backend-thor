@@ -104,21 +104,21 @@ class ArticlesTest(APITestCase):
         self.response10 = self.client.post(
             signup_url, self.signUp2, format='json')
 
-        User.objects.filter(email="jude2jg@fox.com").update(is_active=True)
+        User.objects.filter(email="jude2jg@fox.com").update(is_verified=True)
         self.response2 = self.client.post(
             login_url, self.login, format='json')
         self.token = self.response2.data['user_token']
 
         self.headers = {'HTTP_AUTHORIZATION': f'Token {self.token}'}
 
-        User.objects.filter(email="jude2jfg@fox.com").update(is_active=True)
+        User.objects.filter(email="jude2jfg@fox.com").update(is_verified=True)
         self.response9 = self.client.post(
             login_url, self.login2, format='json')
         self.token = self.response9.data['user_token']
         self.headers2 = {'HTTP_AUTHORIZATION': f'Token {self.token}'}
         
 
-        User.objects.filter(email="jake@fox.com").update(is_active=True)
+        User.objects.filter(email="jake@fox.com").update(is_verified=True)
         self.response_user_rates = self.client.post(
             login_url, self.user_rates_login, format='json')
         self.token_user_rates = self.response_user_rates.data['user_token']

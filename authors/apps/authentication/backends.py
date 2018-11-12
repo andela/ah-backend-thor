@@ -1,9 +1,6 @@
 import jwt
-
 from django.conf import settings
-
 from rest_framework import authentication, exceptions, request
-
 from .models import User
 
 
@@ -28,14 +25,11 @@ class JWTAuthentication(authentication.BaseAuthentication):
         return self._authenticate_credentials(request, token)
 
     def _authenticate_credentials(self, request, token):
-
         try:
             payload = jwt.decode(token, settings.SECRET_KEY)
-
         except:
             msg = 'Invalid authentication. Token could not be decoded.'
             raise exceptions.AuthenticationFailed(msg)
-
         try:
             try:
                 user = User.objects.get(pk=payload['id'])
@@ -44,9 +38,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         except User.DoesNotExist:
             msg = 'No user matching this token was found.'
             raise exceptions.AuthenticationFailed(msg)
-
         if not user.is_active:
             msg = 'This user has been deactivated.'
             raise exceptions.AuthenticationFailed(msg)
-
         return (user, token)
