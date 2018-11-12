@@ -48,8 +48,12 @@ INSTALLED_APPS = [
     'authors.apps.comments',
     'django_nose',
     'drf_yasg',
+    'taggit',
+    'taggit_serializer',
     'authors.apps.articles'
 ]
+TAGGIT_CASE_INSENSITIVE = True
+
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'api_key': {
