@@ -4,9 +4,12 @@ from .models import Article, Rate
 from authors.apps.authentication.models import User
 from .validation import Validator
 from rest_framework.validators import UniqueTogetherValidator
+from taggit_serializer.serializers import (TagListSerializerField,
+                                           TaggitSerializer)
 
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
+    tag_list = TagListSerializerField()
     class Meta:
         model = Article
         fields = '__all__'
@@ -46,6 +49,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         return data
 
 class ArticleUpdateSerializer(serializers.ModelSerializer):
+    tag_list = TagListSerializerField()
     class Meta:
         model = Article
         fields = ['slug', 'title', 'description', 'body', 'tag_list', 'image_url', 'audio_url']
