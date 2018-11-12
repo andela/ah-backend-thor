@@ -4,23 +4,30 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from django.core.mail import send_mail
-from django.conf import settings
 
 from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer, PasswordSerializer
 )
-from django.core.mail import send_mail
 
 import sendgrid
 import os
 
-
 import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
+
 from .models import User
 
+def generate_password_reset_token(data):
+        token = jwt.encode({
+            'email': data
+        }, settings.SECRET_KEY, algorithm='HS256')
+
+        return token.decode('utf-8')
+
+
+from .models import User
 
 def generate_password_reset_token(data):
         token = jwt.encode({
@@ -46,7 +53,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         subject = "Hi {}".format(serializer.data['username'])
-        body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(
+        body = "click this link to verify your account   https://ah-backend-thor.herokuapp.com/api/users/update/{}".format(
             serializer.data['token'])
         email = serializer.data['email']
         send_mail(subject, body, os.getenv("EMAIL"),
@@ -76,9 +83,6 @@ class LoginAPIView(generics.CreateAPIView):
         }
         return Response(message, status=status.HTTP_200_OK)
 
-
-
-
 class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
@@ -94,15 +98,18 @@ class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         serializer_data = request.data.get('user', {})
-
         # Here is that serialize, validate, save pattern we talked about
         # before.
         serializer = self.serializer_class(
             request.user, data=serializer_data, partial=True
         )
+        
         serializer.is_valid(raise_exception=True)
+        
         serializer.save()
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
+
       
 class SendPasswordResetEmailAPIView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
@@ -112,21 +119,24 @@ class SendPasswordResetEmailAPIView(generics.CreateAPIView):
     def post(self, request):
         #get user email
         user_data = request.data['user']['email']
-
+        
         if not user_data:
             return Response({"message":"Please fill in your email"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            user_email = User.objects.get(email=user_data)
+            user = User.objects.get(email=user_data)
 
             token = generate_password_reset_token(user_data)
 
-            from_email = user_email
-            to_email = [user_email]
+            link = "https://ah-backend-thor.herokuapp.com/api/users/update_password/{}".format(token)
+            serializer_data = self.serializer_class(user)
+            from_email = os.getenv("EMAIL")
+            to_email = [serializer_data['email'].value]
             subject = "Password Reset Email Link"
-            message = "Follow this link to reset your passwword: http://localhost:8000/api/users/update_password/{}".format(token)
+            message = "Follow this link to reset your passwword:" + link
 
             send_mail(subject, message, from_email, to_email, fail_silently= False)
+                
             return Response(
                 {'message':'Check your email for the password reset link', "token":token}, status=status.HTTP_201_CREATED)
         except:
@@ -145,6 +155,8 @@ class PasswordUpdateAPIView(generics.UpdateAPIView):
 
         if not new_password:
             return Response({"message": "Please fill in your password"}, status=status.HTTP_400_BAD_REQUEST)
+        if len(new_password) < 8:
+            return Response({"message":'The password is short. It should be more than 8 characters'})
         try:
             decode_token = jwt.decode(
                 token, settings.SECRET_KEY, algorithms=['HS256'])
@@ -154,7 +166,6 @@ class PasswordUpdateAPIView(generics.UpdateAPIView):
             return Response({'message': 'Password updated'}, status=status.HTTP_201_CREATED)
         except:
             return Response({'message': 'Update failed'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class EmailVerification(generics.ListCreateAPIView):
     serializer_class = UserSerializer
@@ -167,3 +178,4 @@ class EmailVerification(generics.ListCreateAPIView):
 
         return queryset
     serializer_class = UserSerializer
+
