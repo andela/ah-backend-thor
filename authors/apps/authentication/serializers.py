@@ -97,6 +97,10 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'This user has been deactivated.'
             )
+        if not user.is_verified:
+            raise serializers.ValidationError(
+                'This user account needs to be verified.'
+            )
 
         # The `validate` method should return a dictionary of validated data.
         # This is the data that is passed to the `create` and `update` methods
@@ -121,10 +125,17 @@ class UserSerializer(serializers.ModelSerializer):
         min_length=8,
         write_only=True
     )
-
+    bio = serializers.CharField(
+        max_length=128,
+        write_only=True
+    )
+    image = serializers.CharField(
+        max_length=128,
+        write_only=True
+    )
     class Meta:
         model = User
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'username', 'password', 'bio', 'image')
 
         # The `read_only_fields` option is an alternative for explicitly
         # specifying the field with `read_only=True` like we did for password
@@ -163,4 +174,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length= 255, required=True)
-    
+
+
+class SocialSerializer(RegistrationSerializer):
+    def create(self, validated_data):
+       user = User.objects.create_user(**validated_data)
+       user.is_verified = True
+       user.save()
+       return user

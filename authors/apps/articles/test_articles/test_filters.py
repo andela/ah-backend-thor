@@ -12,10 +12,8 @@ class TestUserCommments(APITestCase):
         self.register_url = "/api/users/"
         self.login_url = "/api/users/login/"
         self.articles_url = "/api/articles/"
-        self.comments_url = "/api/comments/articles/how_do_i_write_good_code/comments/"
-        self.comments_url_delete = (
-            "/api/comments/articles/how_do_i_write_good_code/comments/1"
-        )
+        self.filters_url = "/api/articles/?title=How do i write good code"
+        self.filters_tags_url = "/api/articles /?tags=coding"
 
         self.user = {
             "user": {
@@ -36,17 +34,17 @@ class TestUserCommments(APITestCase):
             }
         }
 
-        self.comment = {"comment": {"body": "Code is fun to write"}}
-
-    def test__user_can_create_comment_to_article(self):
+    def test_user_can_get_an_article_based_filter(self):
         """ Creates a comment to a user question """
-        response = self.client.post(self.register_url, self.user, format="json")
+        response = self.client.post(
+            self.register_url, self.user, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("User successfully Registered", response.data["message"])
         User.objects.filter(email="dude1@gmail.com").update(is_verified=True)
         response = self.client.post(self.login_url, self.user, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertIn("User successfully confirmed", response.data["user_message"])
+        self.assertIn("User successfully confirmed",
+                      response.data["user_message"])
         token = response.data["user_token"]
         # self.assertIn("asasdas", token)
         headers = {"HTTP_AUTHORIZATION": "Token " + f"{token}"}
@@ -55,17 +53,9 @@ class TestUserCommments(APITestCase):
             self.articles_url, self.article, **headers, format="json"
         )
         self.assertEqual(article_response.status_code, 201)
-        comment_post_response = self.client.post(
-            self.comments_url, self.comment, **headers, format="json"
-        )
-        self.assertEqual(comment_post_response.status_code, 201)
-
-        comment_get_response = self.client.get(
-            self.comments_url, **headers, format="json"
-        )
-        self.assertEqual(comment_get_response.status_code, 200)
-
-        comment_delete_response = self.client.delete(
-            self.comments_url_delete, **headers, format="json"
-        )
-        self.assertEqual(comment_delete_response.status_code, 204)
+        filter_response = self.client.get(
+            self.filters_url, **headers, format="json")
+        self.assertEqual(filter_response.status_code, 200)
+        filter_tags_response = self.client.get(
+            self.filters_tags_url, **headers, format="json")
+        self.assertEqual(filter_response.status_code, 200)
