@@ -19,11 +19,27 @@ from rest_framework.response import Response
 from authors.apps.authentication.models import User
 from authors.apps.core.utils.utils import Utils
 
+from .models import Article, Rate
+from .renderers import ArticlesRenderer
+from .serializers import ArticleSerializer, ArticleUpdateSerializer, RateSerializer
 
-# from authors.apps.articles.views import article_read_time
-from authors.apps.authentication.models import User
-from authors.apps.core.utils.utils import Utils
 
+def article_instance(param):
+    query_article = Article.objects.get(slug=param)
+    return query_article
+
+
+class ArticlesFilterSet(FilterSet):
+    '''Filters articles based on author_name,title and tags of articles'''
+    tags = filters.CharFilter(field_name='tag_list', method='get_tags')
+    title = filters.CharFilter()
+
+    def get_tags(self, queryset, name, value):
+        return queryset.filter(tag_list__name__contains=value)
+
+    class Meta():
+        model = Article
+        fields = ['title', 'author__username', 'tags']
 
 
 def article_instance(param):
@@ -69,7 +85,8 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
             tags = article['tag_list']
             imageUrl = article['image_url']
             audioUrl = article['image_url']
-            read_time = (util.article_read_time(body, imageUrl) + " minute read")
+            read_time = (util.article_read_time(
+                body, imageUrl) + " minute read")
         except Exception as exception:
             raise APIException({
                 'error': f'Required field: {str(exception)} missing!'
@@ -176,6 +193,7 @@ class GetArticleBySlugApiView(generics.RetrieveAPIView):
     permissiion_classes = (permissions.AllowAny, )
     lookup_field = 'slug'
 
+
 class RateCreateAPIView(generics.CreateAPIView):
     permission_class = permissions.IsAuthenticatedOrReadOnly
     serializer_class = RateSerializer
@@ -189,7 +207,6 @@ class RateCreateAPIView(generics.CreateAPIView):
         if self.rate > 5:
             return Response(
                 {
-
                     "message": "Rating is only up to 5"
                 },
                 status=status.HTTP_400_BAD_REQUEST)
@@ -252,7 +269,7 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
             return Response(
                 {
                     "slug": queried_article.slug, "average_ratings": round(av_rating, 0)
-                    }, status=status.HTTP_200_OK)
+                }, status=status.HTTP_200_OK)
         except:
             return Response(
                 {

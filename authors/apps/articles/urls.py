@@ -16,4 +16,3 @@ urlpatterns = [
     path('view_rates/<slug>', RateRetrieveAPIView.as_view(),
          name='view_average_article_ratings'),
 ]
-

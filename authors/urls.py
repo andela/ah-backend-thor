@@ -50,5 +50,7 @@ urlpatterns = [
 
     path('api/', include(('authors.apps.profiles.urls',
                           'authors.apps.profiles'), namespace='profiles')),
-      
+    path('api/favorite/', include(('authors.apps.favorite.urls',
+                                   'authors.apps.favorite'), namespace='favorite'))
+
 ]

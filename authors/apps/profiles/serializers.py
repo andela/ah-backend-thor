@@ -3,13 +3,16 @@ from .models import Profile, FollowUser
 from authors.apps.authentication.serializers import UserSerializer
 from rest_framework.validators import UniqueTogetherValidator
 
+
 class CustomUserSerializer(serializers.RelatedField):
     """Custom Serializer to Get a name"""
+
     def to_representation(self, value):
         return value.username
 
     def get_queryset(self):
         pass
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     """Serializer for User Profile"""
@@ -18,11 +21,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         feilds = ('profile_user', 'bio', 'image', 'following')
-        exclude =['id']
+        exclude = ['id']
 
 
 class FollowUserSerializer(serializers.ModelSerializer):
-    #add vaildation here
+    # add vaildation here
     def validate(self, data):
         following_username = data.get('following_username')
         followed_username = data.get('followed_username')
@@ -39,7 +42,7 @@ class FollowUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'You can not follow yourself!'
             )
-       
+
         return {
             "following_username": following_username,
             "followed_username": followed_username
@@ -50,14 +53,12 @@ class FollowUserSerializer(serializers.ModelSerializer):
         fields = ('followed_username', 'following_username')
         validators = [
             UniqueTogetherValidator(
-                queryset = FollowUser.objects.all(),
-                fields = ('followed_username', 'following_username'),
-                message = "You are already following this user"
+                queryset=FollowUser.objects.all(),
+                fields=('followed_username', 'following_username'),
+                message="You are already following this user"
             )
         ]
 
     def create(self, validated_data):
         follow_user = FollowUser.objects.create(**validated_data)
         return follow_user
-
-        

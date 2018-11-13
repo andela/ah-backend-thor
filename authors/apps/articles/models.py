@@ -16,14 +16,17 @@ class Article(models.Model):
     image_url = models.URLField(blank=False)
     audio_url = models.URLField(blank=True, null=True)
     read_time = models.CharField(max_length=100, blank=False)
+    fav_user = models.ManyToManyField(User, related_name='fav_users')
 
     def __str__(self):
         return f"{self.title}, {self.body}"
 
 
 class Rate(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name= 'article_id')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name= 'user_who_rated_article')
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name='article_id')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user_who_rated_article')
     rate = models.IntegerField(default=0)
 
     def __repr__(self):
