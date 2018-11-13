@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.google',
-
 ]
 TAGGIT_CASE_INSENSITIVE = True
 

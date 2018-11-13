@@ -34,7 +34,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
             try:
                 user = User.objects.get(pk=payload['id'])
             except:
-                user = User.objects.get(email=payload['email'])
+                user = User.objects.get(email=payload['email']) 
         except User.DoesNotExist:
             msg = 'No user matching this token was found.'
             raise exceptions.AuthenticationFailed(msg)
