@@ -48,7 +48,8 @@ class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
             validator.letter_starts('tag', tag)
         return data
 
-class ArticleUpdateSerializer(serializers.ModelSerializer):
+
+class ArticleUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag_list = TagListSerializerField()
     class Meta:
         model = Article

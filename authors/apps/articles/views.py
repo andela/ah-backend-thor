@@ -1,23 +1,28 @@
 
 import json
 import re
-import time, jwt
+import time
 
-from authors.apps.authentication.models import User
-from authors.apps.core.utils.utils import Utils
+import jwt
+from .models import Article, Rate
+from .renderers import ArticlesRenderer
+from .serializers import ArticleSerializer, ArticleUpdateSerializer, \
+    RateSerializer
+from django.conf import settings
 from django.shortcuts import render
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
-from django.conf import settings
 
-from .models import Article, Rate
-from .renderers import ArticlesRenderer
-from .serializers import ArticleSerializer, ArticleUpdateSerializer, RateSerializer
+# from authors.apps.articles.views import article_read_time
+from authors.apps.authentication.models import User
+from authors.apps.core.utils.utils import Utils
+
 
 def article_instance(param):
     query_article = Article.objects.get(slug=param)
     return query_article
+
 
 class ArticlesListCreateAPIView(generics.ListCreateAPIView):
     queryset = Article.objects.all()
@@ -37,6 +42,7 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
             tags = article['tag_list']
             imageUrl = article['image_url']
             audioUrl = article['image_url']
+            read_time = (util.article_read_time(body, imageUrl) + " minute read")
         except Exception as exception:
             raise APIException({
                 'error': f'Required field: {str(exception)} missing!'
@@ -55,7 +61,6 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
             # make slug unique with timestamp if slug already eists
             if Article.objects.filter(slug=slug).exists():
                 slug += str(time.time()).replace('.', '')
-
             article = {
                 'slug': slug,
                 'title': title,
@@ -64,9 +69,9 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
                 'tag_list': tags,
                 'image_url': imageUrl,
                 'audio_url': audioUrl,
-                'author': author_id
+                'author': author_id,
+                'read_time': read_time
             }
-
             serializer = self.serializer_class(data=article)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -101,11 +106,11 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
                     'title': article_.get('title', article.title),
                     'description': article_.get('description', article.description),
                     'body': article_.get('body', article.body),
-                    'tag_list': article_.get('tag_list', article.tag_list),
+                    'tag_list': article_.get('tag_list', [str(tag) for tag in article.tag_list.all()]),
                     'image_url': article_.get('image_url', article.image_url),
                     'audio_url': article_.get('audio_url', article.audio_url),
+                    'read_time': article_.get('read_time', util.article_read_time(article.body, article.image_url))
                 }
-
                 serializer = ArticleUpdateSerializer(data=new_article)
                 serializer.is_valid(raise_exception=True)
                 serializer.update(article, new_article)
@@ -223,13 +228,12 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
 
             return Response(
                 {
-                    "slug":queried_article.slug,"average_ratings": round(av_rating,0)
+                    "slug":queried_article.slug, "average_ratings": round(av_rating,0)
                     },
                 status=status.HTTP_200_OK)
         except:
             return Response(
                 {
-                    "slug":queried_article.slug,"average_ratings": 0
+                    "slug": queried_article.slug, "average_ratings": 0
                     },
                 status=status.HTTP_200_OK)
-

@@ -91,9 +91,8 @@ class ArticlesTest(APITestCase):
         }
 
         self.rate= {
-                    "rate":4
+                    "rate": 4
                     }
-
         self.client = APIClient()
         self.response1 = self.client.post(
             signup_url, self.signUp, format='json')

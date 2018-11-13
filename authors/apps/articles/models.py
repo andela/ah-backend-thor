@@ -15,6 +15,7 @@ class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image_url = models.URLField(blank=False)
     audio_url = models.URLField(blank=True, null=True)
+    read_time = models.CharField(max_length=100, blank=False)
 
     def __str__(self):
         return f"{self.title}, {self.body}"
@@ -27,4 +28,3 @@ class Rate(models.Model):
 
     def __repr__(self):
         return self.rate
-
