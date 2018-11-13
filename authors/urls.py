@@ -30,8 +30,7 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="joshua.mugisha@andela.com"),
         license=openapi.License(name="BSD License"),
     ),
-    validators=['flex'],
-
+    # validators=['flex'],
     public=True,
     permission_classes=(AllowAny,),
 )
@@ -40,11 +39,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('documentation/', schema_view.with_ui('swagger',
-                                               cache_timeout=0), name='schema-swagger-ui'),
-
-    path('redoc/', schema_view.with_ui('redoc',
-                                       cache_timeout=0), name='schema-redoc'),
-
+                                         cache_timeout=0), name='schema-swagger-ui'),
 
     path('api/', include(('authors.apps.authentication.urls',
                           'authors.apps.authentication'), namespace='authentication')),
