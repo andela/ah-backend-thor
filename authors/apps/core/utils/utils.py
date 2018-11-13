@@ -7,7 +7,10 @@ class Utils:
         try:
             token = request.META.get('HTTP_AUTHORIZATION', ' ').split(' ')[1]
             payload = jwt.decode(token, settings.SECRET_KEY, 'utf-8')
-            author_id = payload['id']
+            try:
+                author_id = payload['id']
+            except:
+                author_id = payload['user_id']
         except Exception as exception:
             raise APIException({
                 'error': f'Login Token required. System error: {str(exception)}'

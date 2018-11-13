@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.1.2/settings/
 """
 
 import os
-
+import datetime
 import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_extensions',
     'rest_framework',
+    'rest_framework_jwt',
 
     'authors.apps.authentication',
     'authors.apps.core',
@@ -48,8 +49,23 @@ INSTALLED_APPS = [
     'authors.apps.comments',
     'django_nose',
     'drf_yasg',
-    'authors.apps.articles'
+
+    'taggit',
+    'taggit_serializer',
+
+    'authors.apps.articles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    'rest_auth',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.twitter',
+    'allauth.socialaccount.providers.google',
 ]
+TAGGIT_CASE_INSENSITIVE = True
+
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'api_key': {
@@ -59,6 +75,7 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -148,13 +165,8 @@ CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',
     'localhost:4000',
 )
-SENDGRID_API_KEY = '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'
+SENDGRID_API_KEY = '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'
 
- 
-# Tell Django about the custom `User` model we created. The string
-# `authentication.User` tells Django we are referring to the `User` model in
-# the `authentication` module. This module is registered above in a setting
-# called `INSTALLED_APPS`.
 AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {
@@ -165,7 +177,16 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'authors.apps.authentication.backends.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
+}
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=60),
+    'JWT_ALLOW_REFRESH': True,
 }
 
 # Use nose to run all tests
@@ -189,3 +210,5 @@ EMAIL_USE_SSL = False
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded_files')
 MEDIA_URL = '/media/'
+
+REST_USE_JWT = True
