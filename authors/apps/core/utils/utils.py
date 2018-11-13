@@ -17,3 +17,19 @@ class Utils:
             })
         else:
             return author_id
+
+    def article_read_time(self, article_body, article_image_url):
+        
+        WPM = 267
+        WORD_LENGTH = 3
+        IMAGE_WEIGHT = 0.05
+        NUMBER_OF_IMAGES = 1
+        total_words = 0
+        for article_text in article_body:
+            total_words += len(article_text) / WORD_LENGTH
+        if len(article_image_url) > 5:
+            read_time = int((total_words / WPM)) + \
+                int(IMAGE_WEIGHT * NUMBER_OF_IMAGES)
+        else:
+            read_time = int((total_words / WPM))
+        return str(read_time)
