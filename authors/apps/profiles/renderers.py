@@ -13,3 +13,4 @@ class ProfileRenderer(JSONRenderer):
         return json.dumps({
             'profile': data
         })
+

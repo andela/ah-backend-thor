@@ -1,6 +1,25 @@
 
 from .imports import *
 
+
+def article_instance(param):
+    query_article = Article.objects.get(slug=param)
+    return query_article
+
+
+class ArticlesFilterSet(FilterSet):
+    '''Filters articles based on author_name,title and tags of articles'''
+    tags = filters.CharFilter(field_name='tag_list', method='get_tags')
+    title = filters.CharFilter()
+
+    def get_tags(self, queryset, name, value):
+        return queryset.filter(tag_list__name__contains=value)
+
+    class Meta():
+        model = Article
+        fields = ['title', 'author__username', 'tags']
+
+
 def article_instance(param):
     query_article = Article.objects.get(slug=param)
     return query_article
@@ -10,6 +29,8 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
     renderer_class = ArticlesRenderer
     permission_class = permissions.IsAuthenticatedOrReadOnly
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = ArticlesFilterSet
 
     def create(self, request, *args, **kwargs):
 
@@ -76,7 +97,7 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
         author_id = util.get_token(request)
         if isinstance(author_id, int):
             user = User.objects.get(id=author_id)
-            
+
             if author_id != article.author.id:
                 raise APIException({
                     'error': f'Only article author {user.username} can update this article!'
@@ -137,40 +158,40 @@ class RateCreateAPIView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """ Add ratings to an article"""
-       
         slug = self.kwargs.get(self.look_url_kwarg)
         self.rate = request.data.get('rate')
 
         if self.rate > 5:
             return Response(
                 {
-                    "message":"Rating is only up to 5"
-                    },
+
+                    "message": "Rating is only up to 5"
+                },
                 status=status.HTTP_400_BAD_REQUEST)
-        #get id in token:
+        # get id in token:
         token = request.META.get('HTTP_AUTHORIZATION', ' ').split(' ')[1]
-        decode_token = jwt.decode(token, settings.SECRET_KEY, algorithm='HS256')
+        decode_token = jwt.decode(
+            token, settings.SECRET_KEY, algorithm='HS256')
         user_id = decode_token['id']
 
-        #avoid a question's author from voting
-        
+        # avoid a question's author from voting
         queried_article = article_instance(slug)
         if queried_article.author.id == user_id and queried_article.slug == slug:
             return Response(
                 {
-                    "message":"You can not rate your article"
-                    },
+                    "message": "You can not rate your article"
+                },
                 status=status.HTTP_400_BAD_REQUEST)
 
         serializer = self.serializer_class(
-            data = {"rate":self.rate,"user":user_id,'article':queried_article.id})
+            data={"rate": self.rate, "user": user_id, 'article': queried_article.id})
         serializer.is_valid(raise_exception=True)
-        serializer.save() 
-        
+        serializer.save()
+
         return Response(
             {
-                "slug":queried_article.slug, "rating_details":serializer.data
-                },
+                "slug": queried_article.slug, "rating_details": serializer.data
+            },
             status=status.HTTP_200_OK)
 
 
@@ -183,38 +204,37 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
 
         slug = self.kwargs.get(self.look_url_kwarg)
         queried_article = article_instance(slug)
-        
+
         queryset = Rate.objects.filter(article=queried_article.id)
 
         return queryset
-        
+
     def retrieve(self, request, *args, **kwargs):
         """ Returns tghe average of an article's ratings"""
 
         slug = self.kwargs.get(self.look_url_kwarg)
-        
         query = self.get_queryset(self.look_url_kwarg)
         total_count = query.count()
 
         queried_article = article_instance(slug)
         total_rates = 0
-       
         for rate in query:
-            rated  = rate.rate
-            total_rates += rated 
+            rated = rate.rate
+            total_rates += rated
         try:
             av_rating = total_rates/total_count
 
             return Response(
                 {
-                    "slug":queried_article.slug,"average_ratings": round(av_rating,0)
-                    },
+                    "slug": queried_article.slug, "average_ratings": round(av_rating, 0)
+                },
+
                 status=status.HTTP_200_OK)
         except:
             return Response(
                 {
-                    "slug":queried_article.slug,"average_ratings": 0
-                    },
+                    "slug": queried_article.slug, "average_ratings": 0
+                },
                 status=status.HTTP_200_OK)
 
 
