@@ -3,8 +3,8 @@ from django_filters.rest_framework import FilterSet, filters, DjangoFilterBacken
 from django.conf import settings
 import json
 import re
-import time
-import jwt
+import time, jwt
+
 
 from authors.apps.authentication.models import User
 from authors.apps.core.utils.utils import Utils
@@ -34,6 +34,10 @@ class ArticlesFilterSet(FilterSet):
         model = Article
         fields = ['title', 'author__username', 'tags']
 
+
+def article_instance(param):
+    query_article = Article.objects.get(slug=param)
+    return query_article
 
 class ArticlesListCreateAPIView(generics.ListCreateAPIView):
     queryset = Article.objects.all()
@@ -162,7 +166,6 @@ class GetArticleBySlugApiView(generics.RetrieveAPIView):
     permissiion_classes = (permissions.AllowAny, )
     lookup_field = 'slug'
 
-
 class RateCreateAPIView(generics.CreateAPIView):
     permission_class = permissions.IsAuthenticatedOrReadOnly
     serializer_class = RateSerializer
@@ -170,13 +173,13 @@ class RateCreateAPIView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """ Add ratings to an article"""
-
         slug = self.kwargs.get(self.look_url_kwarg)
         self.rate = request.data.get('rate')
 
         if self.rate > 5:
             return Response(
                 {
+
                     "message": "Rating is only up to 5"
                 },
                 status=status.HTTP_400_BAD_REQUEST)
@@ -187,7 +190,6 @@ class RateCreateAPIView(generics.CreateAPIView):
         user_id = decode_token['id']
 
         # avoid a question's author from voting
-
         queried_article = article_instance(slug)
         if queried_article.author.id == user_id and queried_article.slug == slug:
             return Response(
@@ -226,13 +228,11 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
         """ Returns tghe average of an article's ratings"""
 
         slug = self.kwargs.get(self.look_url_kwarg)
-
         query = self.get_queryset(self.look_url_kwarg)
         total_count = query.count()
 
         queried_article = article_instance(slug)
         total_rates = 0
-
         for rate in query:
             rated = rate.rate
             total_rates += rated
@@ -243,6 +243,7 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
                 {
                     "slug": queried_article.slug, "average_ratings": round(av_rating, 0)
                 },
+
                 status=status.HTTP_200_OK)
         except:
             return Response(
@@ -250,3 +251,4 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
                     "slug": queried_article.slug, "average_ratings": 0
                 },
                 status=status.HTTP_200_OK)
+
