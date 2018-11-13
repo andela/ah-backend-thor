@@ -18,6 +18,9 @@ omit =
     *authors/wsgi*
     *manage.py
     *serializers.py
+    *utils.py
+    *renders.py
+    *signals.py
 
 
 show_missing= True
