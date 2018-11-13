@@ -1,30 +1,21 @@
-Authors Haven - A Social platform for the creative at heart.
-=======
+## Build Status
+[![Build Status](https://travis-ci.org/andela/ah-backend-thor.svg?branch=develop)](https://travis-ci.org/andela/ah-backend-thor)
+[![Maintainability](https://api.codeclimate.com/v1/badges/3252fab55c9bb37768d7/maintainability)](https://codeclimate.com/github/andela/ah-backend-thor/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/andela/ah-backend-thor/badge.svg?branch=develop)](https://coveralls.io/github/andela/ah-backend-thor?branch=develop)
+
+# Authors Haven - A Social platform for the creative at heart.
 
 ## Vision
+
 Create a community of like minded authors to foster inspiration and innovation
 by leveraging the modern web.
 
-## Installation
-
-1. Clone this repository: `git clone https://github.com/andela/ah-django.git`.
-2. `cd` into `src`: `cd src`.
-3. Install [pyenv](https://github.com/yyuu/pyenv#installation).
-4. Install [pyenv-virtualenv](https://github.com/yyuu/pyenv-virtualenv#installation).
-5. Install Python 3.5.2: `pyenv install 3.5.2`.
-6. Create a new virtualenv called `authorshaven`: `pyenv virtualenv 3.5.2 authorshaven`.
-7. Set the local virtualenv to `authorshaven`: `pyenv local authorshaven`.
-8. Reload the `pyenv` environment: `pyenv rehash`.
-
-If all went well then your command line prompt should now start with `(src)`.
-
-If your command line prompt does not start with `(src)` at this point, try running `pyenv activate src`.
-
-If pyenv is still not working,kindly contact your Technical Team Lead.
-
 ---
 
+## Build status
+
 ## API Spec
+
 The preferred JSON object to be returned by the API should be structured as follows:
 
 ### Users (for authentication)
@@ -40,7 +31,9 @@ The preferred JSON object to be returned by the API should be structured as foll
   }
 }
 ```
+
 ### Profile
+
 ```source-json
 {
   "profile": {
@@ -51,7 +44,9 @@ The preferred JSON object to be returned by the API should be structured as foll
   }
 }
 ```
+
 ### Single Article
+
 ```source-json
 {
   "article": {
@@ -73,7 +68,9 @@ The preferred JSON object to be returned by the API should be structured as foll
   }
 }
 ```
+
 ### Multiple Articles
+
 ```source-json
 {
   "articles":[{
@@ -113,7 +110,9 @@ The preferred JSON object to be returned by the API should be structured as foll
   "articlesCount": 2
 }
 ```
+
 ### Single Comment
+
 ```source-json
 {
   "comment": {
@@ -130,7 +129,9 @@ The preferred JSON object to be returned by the API should be structured as foll
   }
 }
 ```
+
 ### Multiple Comments
+
 ```source-json
 {
   "comments": [{
@@ -144,10 +145,13 @@ The preferred JSON object to be returned by the API should be structured as foll
       "image": "https://i.stack.imgur.com/xHWG8.jpg",
       "following": false
     }
-  }]
+  }],
+  "commentsCount": 1
 }
 ```
+
 ### List of Tags
+
 ```source-json
 {
   "tags": [
@@ -156,8 +160,10 @@ The preferred JSON object to be returned by the API should be structured as foll
   ]
 }
 ```
+
 ### Errors and Status Codes
-If a request fails any validations, expect a 422 and errors in the following format:
+
+If a request fails any validations, expect errors in the following format:
 
 ```source-json
 {
@@ -168,16 +174,16 @@ If a request fails any validations, expect a 422 and errors in the following for
   }
 }
 ```
+
 ### Other status codes:
+
 401 for Unauthorized requests, when a request requires authentication but it isn't provided
 
 403 for Forbidden requests, when a request may be valid but the user doesn't have permissions to perform the action
 
 404 for Not found requests, when a resource can't be found to fulfill the request
 
-
-Endpoints:
-----------
+## Endpoints:
 
 ### Authentication:
 
@@ -195,6 +201,7 @@ Example request body:
 ```
 
 No authentication required, returns a User
+
 Required fields: `email`, `password`
 
 ### Registration:
@@ -406,9 +413,8 @@ No additional parameters required
 
 `GET /api/tags`
 
-`\
-`
-
-
-
-
+### For team thor members about run the project on local machine
+create a .env file in the root of your project
+put the variables as shared
+source the .env file in the terminal
+and then you are set.

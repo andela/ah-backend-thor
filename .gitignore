@@ -3,9 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#ignore migrations
+# migrations/
 # C extensions
 *.so
 
+.editorconfig
 # Distribution / packaging
 .Python
 env/
@@ -82,6 +85,7 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+ah-backend-thor/
 
 # Spyder project settings
 .spyderproject
@@ -91,3 +95,23 @@ ENV/
 
 # SQLite3
 db.sqlite3
+
+# editorconfig
+.editorconfig
+# VScode and settings
+.vscode/
+
+
+
+# migrations
+# authors/apps/authentication/migrations
+
+# authors/apps/authentication/migrations/
+
+
+.DS_Store
+
+# editor config
+.editorconfig
+
+sendgrid.env
