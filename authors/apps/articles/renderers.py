@@ -6,7 +6,7 @@ from rest_framework.utils.serializer_helpers import ReturnList, ReturnDict
 
 class BaseRenderer(JSONRenderer):
     charset = 'utf-8'
-    # def __init__(self,)
+    
     def render(self, data, media_type= None, render_context=None):
         '''
         Returns a dictionary with List of articles
@@ -38,3 +38,4 @@ class ArticleLikesRenderer:
     charset = 'utf-8'
     base.name = 'like_status'
     base.model = LikeArticle
+

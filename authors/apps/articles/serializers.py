@@ -7,7 +7,9 @@ from rest_framework.validators import UniqueTogetherValidator
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
-class ArticleSerializer(serializers.ModelSerializer):
+
+class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
+
     tag_list = TagListSerializerField()
     class Meta:
         model = Article
@@ -87,6 +89,7 @@ class RateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         rate = Rate.objects.create(**validated_data)
         return rate
+
 
 class ArticleLikeSerializer(serializers.ModelSerializer):
     class Meta:

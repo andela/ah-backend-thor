@@ -28,6 +28,7 @@ class Rate(models.Model):
     def __repr__(self):
         return self.rate
 
+
 class LikeArticle(models.Model):
     like = 'like'
     dislike = 'dislike'
@@ -39,3 +40,4 @@ class LikeArticle(models.Model):
 
     def __str__(self):
         return self.like_status
+

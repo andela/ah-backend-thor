@@ -1,20 +1,5 @@
 
-import json
-import re
-import time, jwt
-
-from authors.apps.authentication.models import User
-from authors.apps.core.utils.utils import Utils
-from django.shortcuts import render
-from rest_framework import generics, permissions, status
-from rest_framework.exceptions import APIException
-from rest_framework.response import Response
-from django.conf import settings
-
-from .models import Article, Rate, LikeArticle
-from .renderers import ArticlesRenderer, ArticleLikesRenderer
-from .serializers import (ArticleSerializer, ArticleUpdateSerializer, ArticleLikesUpdateSerializer,
-                          RateSerializer, ArticleLikeSerializer)
+from .imports import *
 
 def article_instance(param):
     query_article = Article.objects.get(slug=param)
@@ -138,7 +123,6 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
         return author_id
 
 
-
 class GetArticleBySlugApiView(generics.RetrieveAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
@@ -232,6 +216,7 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
                     "slug":queried_article.slug,"average_ratings": 0
                     },
                 status=status.HTTP_200_OK)
+
 
 class LikeArticlesView(generics.GenericAPIView):
     serializer_class = ArticleLikeSerializer
