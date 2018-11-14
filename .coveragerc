@@ -7,6 +7,7 @@ omit =
     *renderers*
     *admin.py*
     *tests*
+    *test_articles*
     */migrations/*
     *settings.py*
     *models*
@@ -18,6 +19,8 @@ omit =
     *authors/wsgi*
     *manage.py
     *serializers.py
-    *favorite/apps*
     *utils.py
+    *renderers.py
+    *favorite/apps*
+    
 show_missing= True

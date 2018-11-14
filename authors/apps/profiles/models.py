@@ -13,5 +13,7 @@ class Profile(models.Model):
 
 
 class FollowUser(models.Model):
-    following_username = models.CharField(max_length=255)
-    followed_username = models.CharField(max_length=255)
+
+    following_username = models.CharField(max_length = 255)
+    followed_username = models.CharField(max_length = 255)
+

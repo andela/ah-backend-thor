@@ -193,6 +193,13 @@ JWT_AUTH = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
+}
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=60),
+    'JWT_ALLOW_REFRESH': True,
 }
 
 # Use nose to run all tests

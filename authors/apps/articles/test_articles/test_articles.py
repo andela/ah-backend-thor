@@ -1,4 +1,5 @@
 from authors.apps.articles.models import Article, Rate, User
+from json import loads, dumps
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -130,10 +131,78 @@ class ArticlesTest(APITestCase):
         self.response3 = self.client.get(
             articles_url, format='json')
         self.response6 = self.client.get(
-            f'{articles_url}{slug}', format='json')
 
-        # self.article_id = self.response4.data['id']
+            f'{articles_url}{slug}', format='json') 
+
         self.slug = self.response4.data['slug']
+
+    def test_user_can_get_status(self):
+        resp = self.client.post(
+            articles_url, self.article, **self.headers, format='json')
+        self.data = {"like_status": "like"}
+        num = dict(resp.data)['id']
+        res = self.client.get(f"{articles_url}{num}/like_status", **self.headers, format='json')
+        res2 = self.client.post(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
+        res3 = self.client.get(f"{articles_url}{num}/like_status", format='json')
+        res4 = self.client.post(f"{articles_url}{num}/like_status", self.data, format='json')
+        
+        self.assertTrue(res.status_code == 200)
+        self.assertIn('error', res.data)
+        self.assertEqual(res2.status_code, 201)
+        self.assertIn('like_status', loads(dumps(res3.data))[0])
+        self.assertEqual(res4.status_code, 403)
+        self.assertIn('detail', res4.data)
+
+    def test_user_can_get_status_nonexistant_article(self):
+        res2 = self.client.get(f"{articles_url}49/like_status", **self.headers, format='json')
+        self.assertTrue(res2.status_code == 500)
+        self.assertIn('error', res2.data)
+
+    def test_article_not_yet_liked(self):
+        resp = self.client.post(
+            articles_url, self.article, **self.headers, format='json')
+
+        num = dict(resp.data)['id']
+        res = self.client.get(f"{articles_url}{num}/like_status", **self.headers, format='json')
+        self.assertTrue(res.status_code == 200)
+        self.assertIn('error', res.data)
+
+    def test_user_can_like_article(self):
+        resp = self.client.post(
+            articles_url, self.article, **self.headers, format='json')
+        self.data = {"like_status": "like"}
+        num = dict(resp.data)['id']
+        res = self.client.post(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
+
+        self.assertTrue(res.status_code == 201)
+        self.assertIn('like_status', res.data)
+
+    def test_user_can_update_like_status(self):
+        resp = self.client.post(
+            articles_url, self.article, **self.headers, format='json')
+        self.data = {"like_status": "like"}
+        num = dict(resp.data)['id']
+        res = self.client.put(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
+
+        self.assertTrue(res.status_code == 500)
+        res = self.client.post(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
+        self.assertTrue(res.status_code, 201)
+        self.assertIn('like_status', res.data)
+
+    def test_wrong_user_can_update_like_status(self):
+        resp = self.client.post(
+            articles_url, self.article, **self.headers, format='json')
+        self.data = {"like_status": "like"}
+        num = dict(resp.data)['id']
+        self.data2 = {"like_status": "dislike"}
+        res1 = self.client.post(f"{articles_url}{num}/like_status", self.data, **self.headers, format='json')
+        res = self.client.put(f"{articles_url}{num}/like_status", self.data2, **self.headers2 , format='json')
+        
+        self.assertTrue(res1.status_code, 201)
+        self.assertTrue(res.status_code, 500)
+        self.assertIn('error', res.data)
+        self.assertEqual('Only judme29 can edit this!', res.data['error'])
+
 
     def test_user_can_post_article(self):
         self.assertEqual(self.response4.status_code, 201)
@@ -177,84 +246,42 @@ class ArticlesTest(APITestCase):
 
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
-
+        self.data = {"like_status": "like"}
         num = dict(resp.data)['id']
-        res = self.client.delete(
-            f'{articles_url}{num}', **self.headers, format='json')
-        self.assertEqual(res.status_code, 200)
-        self.assertIn('success', res.data)
+        res = self.client.get(f"{articles_url}{num}/like_status", **self.headers, format='json')
+        res2 = self.client.post(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
+        res3 = self.client.get(f"{articles_url}{num}/like_status", format='json')
+        res4 = self.client.post(f"{articles_url}{num}/like_status", self.data, format='json')
+        
+        self.assertTrue(res.status_code == 200)
+        self.assertIn('error', res.data)
+        self.assertEqual(res2.status_code, 201)
+        self.assertIn('like_status', loads(dumps(res3.data))[0])
+        self.assertEqual(res4.status_code, 403)
+        self.assertIn('detail', res4.data)
 
-    def test_user_can_update_article(self):
-        data = {
-            "article": {
-                "title": "cows",
-                "description": "Ever wonder how?",
-                "body": "It takes a Jacobian goat not cow",
-                "tag_list": ["cows", "training"]
+    def test_user_can_get_status_nonexistant_article(self):
+        res2 = self.client.get(f"{articles_url}49/like_status", **self.headers, format='json')
+        self.assertTrue(res2.status_code == 500)
+        self.assertIn('error', res2.data)
 
-            }
-        }
+    def test_article_not_yet_liked(self):
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
 
         num = dict(resp.data)['id']
-
-        res = self.client.patch(
-            f'{articles_url}{num}', data, **self.headers, format='json')
-        self.assertEqual(res.status_code, 200)
-
-    def test_wrong_user_update_article(self):
-        data = {
-            "article": {
-                "title": "cows",
-                "description": "Ever wonder how?",
-                "body": "It takes a Jacobian goat not cow",
-                "tag_list": ["cows", "training"]
-
-            }
-        }
-        resp = self.client.post(
-            articles_url, self.article, **self.headers, format='json')
-
-        num = dict(resp.data)['id']
-
-        res = self.client.patch(
-            f'{articles_url}{num}', data, **self.headers2, format='json')
-        self.assertEqual(res.status_code, 500)
+        res = self.client.get(f"{articles_url}{num}/like_status", **self.headers, format='json')
+        self.assertTrue(res.status_code == 200)
         self.assertIn('error', res.data)
 
-    def test_wrong_user_can_delete_article(self):
-
+    def test_user_can_like_article(self):
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
-
+        self.data = {"like_status": "like"}
         num = dict(resp.data)['id']
-        res = self.client.delete(
-            f'{articles_url}{num}', **self.headers2, format='json')
-        self.assertEqual(res.status_code, 500)
-        self.assertIn('error', res.data)
 
-    def test_user_can_rate_an_article(self):
-        response = self.client.post(
-            '/api/articles/add_rates/{}'.format(self.slug), self.rate, **self.headers_user_rates, format='json')
-        self.assertIn("how_to_train_your_dragon", response.data['slug'])
+        res = self.client.post(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
 
-    def test_author_cannot_rate_his_article(self):
-        response = self.client.post(
-            '/api/articles/add_rates/{}'.format(self.slug), self.rate, **self.headers, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("You can not rate your article",
-                      response.data['message'])
+        self.assertTrue(res.status_code == 201)
+        self.assertIn('like_status', res.data)
 
-    def test_display_average_rating_of_an_article_not_rated(self):
-        response = self.client.get(
-            '/api/articles/view_rates/{}'.format(self.slug), format='json')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(0, response.data['average_ratings'])
-
-    def test_display_average_rating_of_an_article_rated(self):
-        self.test_user_can_rate_an_article()
-        response = self.client.get(
-            '/api/articles/view_rates/{}'.format(self.slug), format='json')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(4, response.data['average_ratings'])

@@ -31,3 +31,15 @@ class Rate(models.Model):
 
     def __repr__(self):
         return self.rate
+
+class LikeArticle(models.Model):
+    like = 'like'
+    dislike = 'dislike'
+    choices = ((like, 'like'), (dislike, 'dislike'))
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    like_status = models.CharField(max_length=9, choices=choices)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return self.like_status
