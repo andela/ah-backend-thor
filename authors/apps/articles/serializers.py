@@ -10,9 +10,11 @@ from taggit_serializer.serializers import (TagListSerializerField,
 
 class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag_list = TagListSerializerField()
+
     class Meta:
         model = Article
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ("fav_user",)
 
     def to_representation(self, data):
         ''' Show article's actual details'''
@@ -32,7 +34,7 @@ class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
         })
 
     def validate(self, data):
-        
+
         validator = Validator
         title = data.get('title', None)
         description = data.get('description', None)
@@ -43,7 +45,6 @@ class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
         validator.letter_starts('description', description)
         validator.letter_starts('body', body)
 
-
         for tag in tags:
             validator.letter_starts('tag', tag)
         return data
@@ -51,9 +52,12 @@ class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 class ArticleUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag_list = TagListSerializerField()
+
     class Meta:
         model = Article
-        fields = ['slug', 'title', 'description', 'body', 'tag_list', 'image_url', 'audio_url']
+        fields = ['slug', 'title', 'description',
+                  'body', 'tag_list', 'image_url', 'audio_url']
+
 
 class RateSerializer(serializers.ModelSerializer):
 
@@ -74,20 +78,18 @@ class RateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'The article to which you are voting is missing'
             )
-        return {"rate": rate, "user":user, "article":article}
-    
+        return {"rate": rate, "user": user, "article": article}
 
     class Meta:
         model = Rate
-        fields = ('id','article','rate','user')
+        fields = ('id', 'article', 'rate', 'user')
         validators = [
             UniqueTogetherValidator(
-                queryset = Rate.objects.all(),
-                fields = ('user', 'article')
+                queryset=Rate.objects.all(),
+                fields=('user', 'article')
             )
         ]
 
     def create(self, validated_data):
         rate = Rate.objects.create(**validated_data)
         return rate
-

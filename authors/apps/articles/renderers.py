@@ -7,7 +7,7 @@ from rest_framework.utils.serializer_helpers import ReturnList, ReturnDict
 class ArticlesRenderer(JSONRenderer):
     charset = 'utf-8'
 
-    def render(self, data, media_type= None, render_context=None):
+    def render(self, data, media_type=None, render_context=None):
         '''
         Returns a dictionary with List of articles
         for 'articles' key and number of articles for
@@ -24,5 +24,5 @@ class ArticlesRenderer(JSONRenderer):
         else:
             return json.dumps({
                 'articles': data,
-                'articles_count': len(Article.objects.all()) 
+                'articles_count': len(Article.objects.all())
             })

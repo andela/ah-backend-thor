@@ -1,9 +1,10 @@
 import re
 from rest_framework.exceptions import APIException
 
+
 class Validator:
 
-    def letter_starts( field, value):
+    def letter_starts(field, value):
         if re.compile('[a-zA-Z]+').match(value):
             return value
         else:

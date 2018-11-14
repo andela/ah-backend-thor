@@ -4,7 +4,7 @@ from django.test import TestCase
 
 class TestSettingsAndCore(TestCase):
     def test_database(self):
-        checklist =['ENGINE', 'NAME','USER','PASSWORD','HOST', 'PORT']
+        checklist = ['ENGINE', 'NAME', 'USER', 'PASSWORD', 'HOST', 'PORT']
         self.assertTrue('default' in DATABASES)
         self.assertIn([x for x in checklist][0], DATABASES['default'])
 
