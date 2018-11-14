@@ -1,25 +1,14 @@
-from .models import Article
-# from snippets.serializers import SnippetSerializer
-from rest_framework import mixins
-from rest_framework import generics
-from .serializers import ArticleSerializer
-from rest_framework import response
-from .filter_serializers import FilterSerializer
 
+from .imports import *
 
-class ArticleTagList(generics.ListAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
+class ArticlesFilterSet(FilterSet):
+    '''Filters articles based on author_name,title and tags of articles'''
+    tags = filters.CharFilter(field_name='tag_list', method='get_tags')
+    title = filters.CharFilter()
 
-    def get_queryset(self):
-        """ Return query values using the the tags """
-        # tags = self.kwargs['tag_list']
-        print(self.kwargs)
-        # tags = request.query_params['tag_list']
-        # tagged_items = Article.objects.filter(tag_list__contains=tags)
-        # print(tagged_items)
-        # return tagged_items
-        # tag_list = request.query_params['tag_list']
+    def get_tags(self, queryset, name, value):
+        return queryset.filter(tag_list__name__contains=value)
 
-        # tagged_items = Article.objects.filter(
-        #     tag_list__contains=tag_list).all()
+    class Meta():
+        model = Article
+        fields = ['title', 'author__username', 'tags']

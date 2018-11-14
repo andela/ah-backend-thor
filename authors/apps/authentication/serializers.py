@@ -133,6 +133,7 @@ class UserSerializer(serializers.ModelSerializer):
         max_length=128,
         write_only=True
     )
+
     class Meta:
         model = User
         fields = ('email', 'username', 'password', 'bio', 'image')
@@ -172,13 +173,14 @@ class UserSerializer(serializers.ModelSerializer):
 
         return instance
 
+
 class PasswordSerializer(serializers.Serializer):
-    new_password = serializers.CharField(max_length= 255, required=True)
+    new_password = serializers.CharField(max_length=255, required=True)
 
 
 class SocialSerializer(RegistrationSerializer):
     def create(self, validated_data):
-       user = User.objects.create_user(**validated_data)
-       user.is_verified = True
-       user.save()
-       return user
+        user = User.objects.create_user(**validated_data)
+        user.is_verified = True
+        user.save()
+        return user

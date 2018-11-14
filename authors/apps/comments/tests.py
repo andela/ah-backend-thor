@@ -40,13 +40,15 @@ class TestUserCommments(APITestCase):
 
     def test__user_can_create_comment_to_article(self):
         """ Creates a comment to a user question """
-        response = self.client.post(self.register_url, self.user, format="json")
+        response = self.client.post(
+            self.register_url, self.user, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("User successfully Registered", response.data["message"])
         User.objects.filter(email="dude1@gmail.com").update(is_verified=True)
         response = self.client.post(self.login_url, self.user, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertIn("User successfully confirmed", response.data["user_message"])
+        self.assertIn("User successfully confirmed",
+                      response.data["user_message"])
         token = response.data["user_token"]
         # self.assertIn("asasdas", token)
         headers = {"HTTP_AUTHORIZATION": "Token " + f"{token}"}

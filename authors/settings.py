@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'taggit',
     'taggit_serializer',
 
-    'authors.apps.articles',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -63,6 +62,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.google',
+    'authors.apps.articles',
+    'authors.apps.favorite'
 ]
 TAGGIT_CASE_INSENSITIVE = True
 
@@ -117,7 +118,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ah_backend' or 'dcmdhglo8tdcjp',
         'USER': 'postgres' or 'bbnwhxoooyqlyt',
-        'PASSWORD': '' or 'sudo' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
+        'PASSWORD': '' or 'kegz' or 'sudo' or os.getenv("HEROKU_PASSWORD"),
         'HOST': 'localhost' or 'ec2-107-22-164-225.compute-1.amazonaws.com',
         'PORT': '5432',
     },
@@ -192,6 +193,13 @@ JWT_AUTH = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
+}
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=60),
+    'JWT_ALLOW_REFRESH': True,
 }
 
 # Use nose to run all tests

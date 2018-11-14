@@ -1,6 +1,7 @@
 import json
 from rest_framework.renderers import JSONRenderer
 
+
 class ProfileRenderer(JSONRenderer):
     charset = 'utf-8'
 
@@ -13,4 +14,3 @@ class ProfileRenderer(JSONRenderer):
         return json.dumps({
             'profile': data
         })
-

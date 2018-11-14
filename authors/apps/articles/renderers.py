@@ -1,12 +1,12 @@
 import json
 from rest_framework.renderers import JSONRenderer
-from .models import Article
+from .models import Article, LikeArticle
 from rest_framework.utils.serializer_helpers import ReturnList, ReturnDict
 
 
-class ArticlesRenderer(JSONRenderer):
+class BaseRenderer(JSONRenderer):
     charset = 'utf-8'
-
+    
     def render(self, data, media_type= None, render_context=None):
         '''
         Returns a dictionary with List of articles
@@ -16,13 +16,25 @@ class ArticlesRenderer(JSONRenderer):
         if type(data) != ReturnList:
             errors = data.get('error', None)
             if errors != None:
-                return super(ArticlesRenderer, self).render(data)
+                return super(BaseRenderer, self).render(data)
             else:
                 return json.dumps({
-                    'article': data
+                    self.name: data
                 })
         else:
             return json.dumps({
-                'articles': data,
-                'articles_count': len(Article.objects.all()) 
+                self.name: data,
+                self.name: len(self.model.objects.all()) 
             })
+
+base = BaseRenderer()
+
+class ArticlesRenderer:
+    charset = 'utf-8'
+    base.name = 'articles'
+    base.model = Article
+
+class ArticleLikesRenderer:
+    charset = 'utf-8'
+    base.name = 'like_status'
+    base.model = LikeArticle
