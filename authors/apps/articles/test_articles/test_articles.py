@@ -131,7 +131,9 @@ class ArticlesTest(APITestCase):
         self.response3 = self.client.get(
             articles_url, format='json')
         self.response6 = self.client.get(
+
             f'{articles_url}{slug}', format='json') 
+
         self.slug = self.response4.data['slug']
 
     def test_user_can_get_status(self):
@@ -277,7 +279,9 @@ class ArticlesTest(APITestCase):
             articles_url, self.article, **self.headers, format='json')
         self.data = {"like_status": "like"}
         num = dict(resp.data)['id']
+
         res = self.client.post(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
 
         self.assertTrue(res.status_code == 201)
         self.assertIn('like_status', res.data)
+

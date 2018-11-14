@@ -22,5 +22,5 @@ omit =
     *utils.py
     *renderers.py
     *favorite/apps*
-
+    
 show_missing= True
