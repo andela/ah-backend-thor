@@ -39,7 +39,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('documentation/', schema_view.with_ui('swagger',
-                                         cache_timeout=0), name='schema-swagger-ui'),
+                                               cache_timeout=0), name='schema-swagger-ui'),
 
     path('api/', include(('authors.apps.authentication.urls',
                           'authors.apps.authentication'), namespace='authentication')),
@@ -51,6 +51,8 @@ urlpatterns = [
     path('api/', include(('authors.apps.profiles.urls',
                           'authors.apps.profiles'), namespace='profiles')),
     path('api/favorite/', include(('authors.apps.favorite.urls',
-                                   'authors.apps.favorite'), namespace='favorite'))
+                                   'authors.apps.favorite'), namespace='favorite')),
+    path('api/bookmarks', include(('authors.apps.bookmarks.urls',
+                          'authors.apps.bookmarks'), namespace='bookmarks'))
 
 ]

@@ -1,5 +1,22 @@
 from .imports import *
-from .article_filters import ArticlesFilterSet
+
+
+def article_instance(param):
+    query_article = Article.objects.get(slug=param)
+    return query_article
+
+
+class ArticlesFilterSet(FilterSet):
+    '''Filters articles based on author_name,title and tags of articles'''
+    tags = filters.CharFilter(field_name='tag_list', method='get_tags')
+    title = filters.CharFilter()
+
+    def get_tags(self, queryset, name, value):
+        return queryset.filter(tag_list__name__contains=value)
+
+    class Meta():
+        model = Article
+        fields = ['title', 'author__username', 'tags']
 
 
 def article_instance(param):
@@ -65,13 +82,35 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
 
 
 class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     renderer_class = ArticlesRenderer
-    permission_classes = (permissions.AllowAny,)
-    lookup_field = "pk"
+    permission_classes = (permissions.AllowAny, )
+    lookup_field = 'pk'
+    
+    def get(self, request, *args, **kwargs):
+        article = Article.objects.get(id=kwargs['pk'])
+        article_ = request.data.get('article')
 
+        util = Utils()
+        try:
+            author_id = util.get_token(request)
+        except:
+            author_id = 0
+        if author_id != article.author.id:
+            read_stats = article.read_stats
+            read_stats += 1
+            new_article = {
+                'read_stats': read_stats
+            }
+            serializer = ArticleUpdateStatsSerializer(
+                data=new_article)
+            serializer.is_valid(raise_exception=True)
+            serializer.update(article, new_article)
+        return Response(
+            self.serializer_class(
+                article, context={'author_id': author_id}).data,
+            status=status.HTTP_200_OK)
     def patch(self, request, *args, **kwargs):
         article = Article.objects.get(id=kwargs["pk"])
         article_ = request.data.get("article")

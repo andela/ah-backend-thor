@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.google',
     'authors.apps.articles',
-    'authors.apps.favorite'
+    'authors.apps.favorite',
+    'authors.apps.bookmarks'
 ]
 TAGGIT_CASE_INSENSITIVE = True
 

@@ -230,7 +230,7 @@ class ArticlesTest(APITestCase):
         num = dict(resp.data)['id']
 
         response5 = self.client.get(
-            f'{articles_url}{num}', format='json')
+            f'{articles_url}{num}', **self.headers, format='json')
 
         self.assertEqual(response5.status_code, 200)
         self.assertTrue(isinstance(response5.data, ReturnDict))
