@@ -14,7 +14,7 @@ class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
     class Meta:
         model = Article
         # fields = '__all__'
-        exclude = ("fav_user",)
+        exclude = ("fav_user", "bookmarks")
 
     def to_representation(self, data):
         ''' Show article's actual details'''
