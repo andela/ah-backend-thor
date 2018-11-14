@@ -3,14 +3,22 @@ from django.conf import settings
 import json
 import re
 import time
+
 import jwt
+from .models import Article, Rate
+from .renderers import ArticlesRenderer
+from .serializers import ArticleSerializer, ArticleUpdateSerializer, \
+    RateSerializer
+from django.conf import settings
 from django.shortcuts import render
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
-from .models import Article, Rate
-from .renderers import ArticlesRenderer
-from .serializers import ArticleSerializer, ArticleUpdateSerializer, RateSerializer
+
+# from authors.apps.articles.views import article_read_time
+from authors.apps.authentication.models import User
+from authors.apps.core.utils.utils import Utils
+
 
 # from authors.apps.articles.views import article_read_time
 from authors.apps.authentication.models import User
