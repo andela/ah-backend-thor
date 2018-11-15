@@ -71,6 +71,9 @@ class UserProfileRetrieveAPIView(generics.ListAPIView):
     serializer_class = UserProfileSerializer
 
 
+class FollowUserCreateAPIView(generics.CreateAPIView):
+    """ Creates an instance of a user following another user"""
+    authentication_class = (JWTAuthentication,)
     permission_class = (IsAuthenticated,)
     serializer_class = FollowUserSerializer
     serializer_classprofile = UserProfileSerializer

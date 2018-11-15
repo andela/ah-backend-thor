@@ -50,6 +50,8 @@ urlpatterns = [
     path('api/', include(('authors.apps.profiles.urls',
                           'authors.apps.profiles'), namespace='profiles')),
     path('api/favorite/', include(('authors.apps.favorite.urls',
-                                   'authors.apps.favorite'), namespace='favorite'))
+                                   'authors.apps.favorite'), namespace='favorite')),
+    path('api/bookmarks/', include(('authors.apps.bookmarks.urls',
+                          'authors.apps.bookmarks'), namespace='bookmarks'))
 
 ]

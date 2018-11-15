@@ -106,9 +106,8 @@ db.sqlite3
 
 # migrations
 migrations
+migrations/
 # authors/apps/authentication/migrations
-
-migrations
 
 # authors/apps/authentication/migrations/
 

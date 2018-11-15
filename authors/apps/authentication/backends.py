@@ -3,7 +3,6 @@ from django.conf import settings
 from rest_framework import authentication, exceptions, request
 from .models import User
 
-from rest_framework import authentication, exceptions, request
 
 class JWTAuthentication(authentication.BaseAuthentication):
     authentication_header_prefix = 'Token'

@@ -25,8 +25,5 @@ urlpatterns = [
         'rest-auth/twitter/', TwitterLogin.as_view(), name='twitter_login'),
     path(
         'rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
-<<<<<<< HEAD
-=======
 
->>>>>>> 50fb50f... [#161382408]share articles via email, facebbok and twitter (#69)
 ]
