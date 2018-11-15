@@ -231,9 +231,13 @@ class ArticlesTest(APITestCase):
 
         response5 = self.client.get(
             f'{articles_url}{num}', **self.headers, format='json')
+        response6 = self.client.get(
+            f'{articles_url}{num}', format='json')
 
         self.assertEqual(response5.status_code, 200)
         self.assertTrue(isinstance(response5.data, ReturnDict))
+        self.assertEqual(response6.status_code, 200)
+        self.assertTrue(isinstance(response6.data, ReturnDict))
 
     def test_user_post_badTitle(self):
         resp = self.client.post(
