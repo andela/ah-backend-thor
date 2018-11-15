@@ -108,6 +108,7 @@ class TestProfile(APITestCase):
 
     # tests for following users
     def test_user_following_other_users(self):
+        response3 = self.client.post(
             self.follow_user, **self.headers, format='json')
         self.assertEqual('David', response3.data['following_user'])
 
@@ -137,7 +138,7 @@ class TestProfile(APITestCase):
     def test_list_of_authors_user_is_following_non_existent(self):
         response3 = self.client.get(
             '/api/profiles/jake/following', format='json')
-        print(response3.data)
+       
         self.assertEqual([], response3.data['results'])
 
     def test_user_unfollow_other_users(self):

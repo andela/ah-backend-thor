@@ -1,5 +1,5 @@
 from .imports import *
-from .article_filters import ArticlesFilterSet
+from .article_views import ArticlesFilterSet, LikeArticlesView
 
 
 def article_instance(param):

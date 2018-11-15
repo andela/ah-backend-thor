@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1.2to/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRETE_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.google',
     'authors.apps.articles',
-    'authors.apps.favorite'
+    'authors.apps.favorite',
+    'authors.apps.bookmarks'
 ]
 TAGGIT_CASE_INSENSITIVE = True
 
@@ -113,10 +114,10 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ah_backend' or 'dcmdhglo8tdcjp',
-        'USER': 'postgres' or 'bbnwhxoooyqlyt',
+        'NAME': 'ah_backend' or 'd8oc2435np9a8b',
+        'USER': 'postgres' or 'vrisihssqtbwrj',
         'PASSWORD': '' or 'kegz' or 'sudo' or os.getenv("HEROKU_PASSWORD"),
-        'HOST': 'localhost' or 'ec2-107-22-164-225.compute-1.amazonaws.com',
+        'HOST': 'localhost' or 'ec2-54-235-193-0.compute-1.amazonaws.com',
         'PORT': '5432',
     },
 }

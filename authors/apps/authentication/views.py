@@ -53,33 +53,32 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         subject = "Hi {}".format(serializer.data['username'])
-        # body = "click this link to verify your account   https://ah-backend-thor.herokuapp.com/api/users/update/{}".format(
-        #     serializer.data['token'])
-        body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(
-            serializer.data['token'])
-        email = serializer.data['email']
+        body = f"click this link to verify your account   https://ah-backend-thor.herokuapp.com/api/users/update/{serializer.data['token']}"
+        # body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(
+            # serializer.data['token'])
+        email=serializer.data['email']
         send_mail(subject, body, os.getenv("EMAIL"),
-                  [email], fail_silently=False)
-        return_data = serializer.data
+                  [email], fail_silently = False)
+        return_data=serializer.data
         return_data.pop('token')
-        return Response({'message': 'User successfully Registered'}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'User successfully Registered'}, status = status.HTTP_201_CREATED)
 
 
 class LoginAPIView(generics.CreateAPIView):
-    permission_classes = (AllowAny,)
-    renderer_classes = (UserJSONRenderer,)
-    serializer_class = LoginSerializer
+    permission_classes=(AllowAny,)
+    renderer_classes=(UserJSONRenderer,)
+    serializer_class=LoginSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
+        user=request.data.get('user', {})
 
         # Notice here that we do not call `serializer.save()` like we did for
         # the registration endpoint. This is because we don't actually have
         # anything to save. Instead, the `validate` method on our serializer
         # handles everything we need.
-        serializer = self.serializer_class(data=user)
-        serializer.is_valid(raise_exception=True)
-        message = {
+        serializer=self.serializer_class(data = user)
+        serializer.is_valid(raise_exception = True)
+        message={
             'user_message': "User successfully confirmed",
             'user_token': serializer.data['token']
         }
@@ -104,80 +103,80 @@ class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         # Here is that serialize, validate, save pattern we talked about
         # before.
         serializer = self.serializer_class(
-            request.user, data=serializer_data, partial=True
+            request.user, data = serializer_data, partial = True
         )
 
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception = True)
 
         serializer.save()
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status = status.HTTP_200_OK)
 
 
 class SendPasswordResetEmailAPIView(generics.CreateAPIView):
-    permission_classes = (AllowAny,)
-    renderer_classes = (UserJSONRenderer,)
-    serializer_class = UserSerializer
+    permission_classes=(AllowAny,)
+    renderer_classes=(UserJSONRenderer,)
+    serializer_class=UserSerializer
 
     def post(self, request):
         # get user email
-        user_data = request.data['user']['email']
+        user_data=request.data['user']['email']
 
         if not user_data:
-            return Response({"message": "Please fill in your email"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Please fill in your email"}, status = status.HTTP_400_BAD_REQUEST)
 
         try:
-            user = User.objects.get(email=user_data)
+            user=User.objects.get(email = user_data)
 
-            token = generate_password_reset_token(user_data)
+            token=generate_password_reset_token(user_data)
 
-            link = "https://ah-backend-thor.herokuapp.com/api/users/update_password/{}".format(
+            link="https://ah-backend-thor.herokuapp.com/api/users/update_password/{}".format(
                 token)
-            serializer_data = self.serializer_class(user)
-            from_email = os.getenv("EMAIL")
-            to_email = [serializer_data['email'].value]
-            subject = "Password Reset Email Link"
-            message = "Follow this link to reset your passwword:" + link
+            serializer_data=self.serializer_class(user)
+            from_email=os.getenv("EMAIL")
+            to_email=[serializer_data['email'].value]
+            subject="Password Reset Email Link"
+            message="Follow this link to reset your passwword:" + link
 
             send_mail(subject, message, from_email,
-                      to_email, fail_silently=False)
+                      to_email, fail_silently = False)
 
             return Response(
-                {'message': 'Check your email for the password reset link', "token": token}, status=status.HTTP_201_CREATED)
+                {'message': 'Check your email for the password reset link', "token": token}, status = status.HTTP_201_CREATED)
         except:
-            return Response({'message': 'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'User does not exist'}, status = status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordUpdateAPIView(generics.UpdateAPIView):
-    permission_classes = (AllowAny,)
-    serializer_class = PasswordSerializer
-    look_url_kwarg = 'token'
+    permission_classes=(AllowAny,)
+    serializer_class=PasswordSerializer
+    look_url_kwarg='token'
 
     def update(self, request, *args, **kwargs):
         # get token
-        token = self.kwargs.get(self.look_url_kwarg)
-        new_password = request.data.get('new_password')
+        token=self.kwargs.get(self.look_url_kwarg)
+        new_password=request.data.get('new_password')
 
         if not new_password:
-            return Response({"message": "Please fill in your password"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Please fill in your password"}, status = status.HTTP_400_BAD_REQUEST)
         if len(new_password) < 8:
             return Response({"message": 'The password is short. It should be more than 8 characters'})
         try:
-            decode_token = jwt.decode(
-                token, settings.SECRET_KEY, algorithms=['HS256'])
-            user = User.objects.get(email=decode_token['email'])
+            decode_token=jwt.decode(
+                token, settings.SECRET_KEY, algorithms = ['HS256'])
+            user=User.objects.get(email = decode_token['email'])
             user.set_password(new_password)
             user.save()
-            return Response({'message': 'Password updated'}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'Password updated'}, status = status.HTTP_201_CREATED)
         except:
-            return Response({'message': 'Update failed'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Update failed'}, status = status.HTTP_400_BAD_REQUEST)
 
 
 class EmailVerification(generics.ListCreateAPIView):
-    serializer_class = UserSerializer
+    serializer_class=UserSerializer
 
     def get_queryset(self):
-        email_token = jwt.decode(
+        email_token=jwt.decode(
             self.kwargs["pk"], settings.SECRET_KEY, algorithm='HS256')
         queryset = User.objects.filter(id=email_token['id'])
         User.objects.filter(id=email_token['id']).update(is_verified=True)
