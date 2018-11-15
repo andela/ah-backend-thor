@@ -2,11 +2,14 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.vscode/
 
 #ignore migrations
 # migrations/
 # C extensions
 *.so
+
+.editorconfig
 # Distribution / packaging
 .Python
 env/
@@ -102,6 +105,7 @@ db.sqlite3
 
 
 # migrations
+migrations
 # authors/apps/authentication/migrations
 
 # authors/apps/authentication/migrations/

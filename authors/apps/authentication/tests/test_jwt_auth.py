@@ -27,10 +27,9 @@ class JwtTestCase(JWTAuthentication, TestCase):
 
         self.response = self.client.post(
             self.register_url, self.user, format='json')
-        User.objects.filter(email="dude1@gmail.com").update(is_active=True)
+        User.objects.filter(email="dude1@gmail.com").update(is_verified=True)
         self.user_login = self.client.post(
             self.login_url, self.user, format='json')
-
 
     def test_auth_header_prefix(self):
         self.assertEqual('Token', self.authentication_header_prefix)
