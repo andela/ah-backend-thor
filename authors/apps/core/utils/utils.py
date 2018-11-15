@@ -2,6 +2,7 @@ import jwt
 from rest_framework.exceptions import APIException
 from django.conf import settings
 
+
 class Utils:
     def get_token(self, request):
         try:

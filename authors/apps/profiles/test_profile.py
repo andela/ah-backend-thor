@@ -29,6 +29,7 @@ class TestProfile(APITestCase):
                 "email": "david@gmail.com",
                 "password": "12345678"
             }
+
         }
 
         self.user2 = {
@@ -37,6 +38,7 @@ class TestProfile(APITestCase):
                 "email": "jake@gmail.com",
                 "password": "12345678@11"
             }
+
         }
 
         self.response = self.client.post(
@@ -78,6 +80,7 @@ class TestProfile(APITestCase):
 
         res = self.client.get(self.user_profile_url, **
                               self.headers, format="json")
+
         self.assertEqual(res.status_code, 200)
 
     def test_retrive_userprofile_detail(self):
