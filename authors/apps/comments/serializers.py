@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
-from authors.apps.comments.models import Comments
+from authors.apps.comments.models import Comments, CommentsLikeDislike
 from authors.apps.authentication.models import User
 
 
@@ -25,3 +25,11 @@ class CommentSerializer(serializers.ModelSerializer):
             return comments
         else:
             return {"comment": comments}
+
+
+class CommentLikesDislikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommentsLikeDislike
+        # fields = '__all__'
+        read_only_fields = ['comment', 'users']
+        exclude = ('users',)

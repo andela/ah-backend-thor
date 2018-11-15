@@ -13,9 +13,8 @@ class TestUserCommments(APITestCase):
         self.login_url = "/api/users/login/"
         self.articles_url = "/api/articles/"
         self.comments_url = "/api/comments/articles/how_do_i_write_good_code/comments/"
-        self.comments_url_delete = (
-            "/api/comments/articles/how_do_i_write_good_code/comments/1"
-        )
+        self.create_comment_like_url = '/api/comments/1/like'
+        self.comment_likes_url = '/api/comments/1/like'
 
         self.user = {
             "user": {
@@ -38,8 +37,8 @@ class TestUserCommments(APITestCase):
 
         self.comment = {"comment": {"body": "Code is fun to write"}}
 
-    def test__user_can_create_comment_to_article(self):
-        """ Creates a comment to a user question """
+    def test__user_can_like_dislike_a_comment(self):
+        """ Creates a comment like to a user comment """
         response = self.client.post(
             self.register_url, self.user, format="json")
         self.assertEqual(response.status_code, 201)
@@ -66,8 +65,10 @@ class TestUserCommments(APITestCase):
             self.comments_url, **headers, format="json"
         )
         self.assertEqual(comment_get_response.status_code, 200)
-
-        comment_delete_response = self.client.delete(
-            self.comments_url_delete, **headers, format="json"
-        )
-        self.assertEqual(comment_delete_response.status_code, 204)
+        like_comment_response = self.client.post(
+            self.create_comment_like_url, **headers, format='json')
+        self.assertEqual(like_comment_response.status_code, 200)
+        self.assertIn("Comment liked", like_comment_response.data['message'])
+        comment_likes = self.client.get(
+            self.comment_likes_url, **headers, format='json')
+        self.assertIn('like', comment_likes.data['likes'][0])
