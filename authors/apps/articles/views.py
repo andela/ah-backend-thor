@@ -52,10 +52,6 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
                     slug += word
                 elif word.isspace():
                     slug += "_"
-            # make slug unique with timestamp if slug already eists
-            if Article.objects.filter(slug=slug).exists():
-                slug += str(time.time()).replace('.', '')
-            article = {
                 'slug': slug,
                 'title': title,
                 'description': description,
@@ -79,7 +75,7 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
     renderer_class = ArticlesRenderer
     permission_classes = (permissions.AllowAny, )
     lookup_field = 'pk'
-    
+
     def get(self, request, *args, **kwargs):
         article = Article.objects.get(id=kwargs['pk'])
         article_ = request.data.get('article')
@@ -95,22 +91,22 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
                 'read_stats': read_stats
             }
             serializer = ArticleUpdateStatsSerializer(
-                data=new_article)
-            serializer.is_valid(raise_exception=True)
+                data = new_article)
+            serializer.is_valid(raise_exception = True)
             serializer.update(article, new_article)
         return Response(
             self.serializer_class(
                 article, context={'author_id': author_id}).data,
-            status=status.HTTP_200_OK)
+            status = status.HTTP_200_OK)
 
     def patch(self, request, *args, **kwargs):
-        article = Article.objects.get(id=kwargs["pk"])
-        article_ = request.data.get("article")
+        article=Article.objects.get(id = kwargs["pk"])
+        article_=request.data.get("article")
 
-        util = Utils()
-        author_id = util.get_token(request)
+        util=Utils()
+        author_id=util.get_token(request)
         if isinstance(author_id, int):
-            user = User.objects.get(id=author_id)
+            user=User.objects.get(id = author_id)
             if author_id != article.author.id:
                 raise APIException(
                     {

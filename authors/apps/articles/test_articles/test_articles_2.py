@@ -16,16 +16,19 @@ signup_url = reverse('authentication:create_user')
 login_url = reverse('authentication:login')
 slug = "how_to_train_your_dragon"
 
+
 class TestArticles(ArticlesTest):
     def test_user_can_update_like_status(self):
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
         self.data = {"like_status": "like"}
         num = dict(resp.data)['id']
-        res = self.client.put(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
+        res = self.client.put(
+            f"{articles_url}{num}/like_status", self.data, **self.headers, format='json')
 
         self.assertTrue(res.status_code == 500)
-        res = self.client.post(f"{articles_url}{num}/like_status", self.data,**self.headers, format='json')
+        res = self.client.post(
+            f"{articles_url}{num}/like_status", self.data, **self.headers, format='json')
         self.assertTrue(res.status_code, 201)
         self.assertIn('like_status', res.data)
 
@@ -35,14 +38,15 @@ class TestArticles(ArticlesTest):
         self.data = {"like_status": "like"}
         num = dict(resp.data)['id']
         self.data2 = {"like_status": "dislike"}
-        res1 = self.client.post(f"{articles_url}{num}/like_status", self.data, **self.headers, format='json')
-        res = self.client.put(f"{articles_url}{num}/like_status", self.data2, **self.headers2 , format='json')
-        
+        res1 = self.client.post(
+            f"{articles_url}{num}/like_status", self.data, **self.headers, format='json')
+        res = self.client.put(
+            f"{articles_url}{num}/like_status", self.data2, **self.headers2, format='json')
+
         self.assertTrue(res1.status_code, 201)
         self.assertTrue(res.status_code, 500)
         self.assertIn('error', res.data)
         self.assertEqual('Only judme29 can edit this!', res.data['error'])
-
 
     def test_user_can_post_articl(self):
         self.assertEqual(self.response4.status_code, 201)
@@ -61,7 +65,7 @@ class TestArticles(ArticlesTest):
             f'{articles_url}{num}', **self.headers, format='json')
         response6 = self.client.get(
             f'{articles_url}{num}', format='json')
-        
+
         self.assertEqual(response5.status_code, 200)
         self.assertTrue(isinstance(response5.data, ReturnDict))
         self.assertEqual(response6.status_code, 200)
@@ -88,7 +92,7 @@ class TestArticles(ArticlesTest):
 
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
-        
+
         num = dict(resp.data)['id']
         res = self.client.delete(
             f'{articles_url}{num}', **self.headers, format='json')
@@ -154,15 +158,18 @@ class TestArticles(ArticlesTest):
         response = self.client.post(
             '/api/articles/add_rates/{}'.format(self.slug), self.rate, **self.headers, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertIn("You can not rate your article", response.data['message'])
+        self.assertIn("You can not rate your article",
+                      response.data['message'])
 
     def test_display_average_rating_of_an_article_not_rated(self):
-        response = self.client.get('/api/articles/view_rates/{}'.format(self.slug), format='json')
+        response = self.client.get(
+            '/api/articles/view_rates/{}'.format(self.slug), format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(0, response.data['average_ratings'])
 
     def test_display_average_rating_of_an_article_rated(self):
         self.test_user_can_rate_an_article()
-        response = self.client.get('/api/articles/view_rates/{}'.format(self.slug), format='json')
+        response = self.client.get(
+            '/api/articles/view_rates/{}'.format(self.slug), format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(4, response.data['average_ratings'])

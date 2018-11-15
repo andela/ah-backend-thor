@@ -19,8 +19,8 @@ omit =
     *authors/wsgi*
     *manage.py
     *serializers.py
-    *utils.py
-    *renders.py
+    *utils.py*
+    *renderers.py*
     *favorite/apps*
     *like_articles*
     *article_filters*
