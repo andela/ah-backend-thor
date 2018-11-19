@@ -78,8 +78,8 @@ class CommentLike(generics.GenericAPIView):
         return response.Response({"likes": serializer.data})
 
 
-class CommentDislike(generics.UpdateAPIView):
-    '''Enables one to update a like or dislike '''
+class CommentDislike(generics.DestroyAPIView):
+    '''Enables one to dislike a comment '''
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = CommentsLikeDislike.objects.all()
     serializer_class = CommentLikesDislikeSerializer

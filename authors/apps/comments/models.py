@@ -19,7 +19,7 @@ class Comments(models.Model):
 class CommentsLikeDislike(models.Model):
     '''Enables a user to like or dislike a comment '''
     like = models.BooleanField(default=True)
-    dislike = models.BooleanField(default=False)
+    # dislike = models.BooleanField(default=False)
     comment = models.ForeignKey(
         Comments, related_name='comments', on_delete=models.CASCADE)
     # users = models.ManyToManyField(User)
