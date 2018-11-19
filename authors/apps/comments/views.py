@@ -20,30 +20,25 @@ class CommentList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def post(self, request, *args, **kwargs):
-        comment = request.data.get("comment", {})  # pragma :no cover
-        serializer = CommentList.serializer_class(
-            data=comment)  # pragma :no cover
-        serializer.is_valid(raise_exception=True)  # pragma :no cover
-        user = request.user  # pragma :no cover
-        slug = kwargs["slug"]  # pragma :no cover
-        articles = Article.objects.filter(
-            slug=slug).first()  # pragma :no cover
-        current_user = User.objects.filter(
-            email=user).first()  # pragma :no cover
-        # pragma :no cover
+        comment = request.data.get("comment", {})
+        serializer = CommentList.serializer_class(data=comment)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        slug = kwargs["slug"]
+        articles = Article.objects.filter(slug=slug).first()
+        current_user = User.objects.filter(email=user).first()
         serializer.save(author=current_user, article=articles)
-        return response.Response(  # pragma :no cover
+        return response.Response(
             {"message": "comment created ", "comment": serializer.data},
             status=status.HTTP_201_CREATED,
         )
 
     def get_queryset(self):
         """ Return a view using the slug """
-        slug = self.kwargs["slug"]  # pragma :no cover
-        _id = Article.objects.filter(slug=slug).first().id  # pragma :no cover
-        comments = Comments.objects.filter(
-            article_id=_id).all()  # pragma :no cover
-        return comments  # pragma :no cover
+        slug = self.kwargs["slug"]
+        _id = Article.objects.filter(slug=slug).first().id
+        comments = Comments.objects.filter(article_id=_id).all()
+        return comments
 
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -79,12 +74,10 @@ class CommentLike(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         '''Enables one to get likes and dislikes '''
-        _id = kwargs['pk']  # pragma :no cover
-        status = CommentsLikeDislike.objects.filter(
-            comment_id=_id)  # pragma :no cover
-        serializer = self.serializer_class(
-            status, many=True)  # pragma :no cover
-        return response.Response({"likes": serializer.data,  # pragma :no cover
+        _id = kwargs['pk']
+        status = CommentsLikeDislike.objects.filter(comment_id=_id)
+        serializer = self.serializer_class(status, many=True)
+        return response.Response({"likes": serializer.data,
                                   "likes_count": len(serializer.data)})
 
 
