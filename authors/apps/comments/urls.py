@@ -6,7 +6,7 @@ urlpatterns = [
     path('articles/<slug:slug>/comments/<int:pk>', CommentDetail.as_view()),
     path('<int:pk>/like',
          CommentLike.as_view()),
-    path('<int:pk>/update',
+    path('<int:pk>/dislike',
          CommentDislike.as_view())
 
 ]

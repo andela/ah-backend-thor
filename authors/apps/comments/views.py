@@ -75,11 +75,12 @@ class CommentLike(generics.GenericAPIView):
         _id = kwargs['pk']
         status = CommentsLikeDislike.objects.filter(comment_id=_id)
         serializer = self.serializer_class(status, many=True)
-        return response.Response({"likes": serializer.data})
+        return response.Response({"likes": serializer.data,
+                                  "likes_count": len(serializer.data)})
 
 
-class CommentDislike(generics.UpdateAPIView):
-    '''Enables one to update a like or dislike '''
+class CommentDislike(generics.DestroyAPIView):
+    '''Enables one to dislike a comment '''
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = CommentsLikeDislike.objects.all()
     serializer_class = CommentLikesDislikeSerializer

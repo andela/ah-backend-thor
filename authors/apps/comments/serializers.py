@@ -30,6 +30,21 @@ class CommentSerializer(serializers.ModelSerializer):
 class CommentLikesDislikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentsLikeDislike
-        # fields = '__all__'
+        fields = '__all__'
         read_only_fields = ['comment', 'users']
-        exclude = ('users',)
+        # exclude = ('users',)
+
+    def to_representation(self, data):
+        ''' Change the way the comment dislike is viewed '''
+        commentlike = super(CommentLikesDislikeSerializer,
+                            self).to_representation(data)
+        if User.objects.filter(pk=commentlike['users']).exists():
+            print(User.objects.filter(pk=commentlike['users']))
+            user = User.objects.get(pk=commentlike['users'])
+            commentlike['users'] = {
+                'id': user.id,
+                'email': user.email,
+                'username': user.username
+            }
+        commentlike_details = commentlike
+        return commentlike_details
