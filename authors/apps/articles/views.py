@@ -79,7 +79,7 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
     renderer_class = ArticlesRenderer
     permission_classes = (permissions.AllowAny, )
     lookup_field = 'pk'
-    
+
     def get(self, request, *args, **kwargs):
         article = Article.objects.get(id=kwargs['pk'])
         article_ = request.data.get('article')
