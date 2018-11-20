@@ -80,7 +80,6 @@ class TestProfile(APITestCase):
 
         res = self.client.get(self.user_profile_url, **
                               self.headers, format="json")
-
         self.assertEqual(res.status_code, 200)
 
     def test_retrive_userprofile_detail(self):
@@ -138,7 +137,7 @@ class TestProfile(APITestCase):
     def test_list_of_authors_user_is_following_non_existent(self):
         response3 = self.client.get(
             '/api/profiles/jake/following', format='json')
-        print(response3.data)
+       
         self.assertEqual([], response3.data['results'])
 
     def test_user_unfollow_other_users(self):

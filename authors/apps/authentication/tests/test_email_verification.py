@@ -6,7 +6,6 @@ from rest_framework.test import APITestCase
 class TestEmailValidation(APITestCase):
 
     def setUp(self):
-
         self.email_verify_url = '/api/users/update/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NDQsImV4cCI6MTU0NjE3NTM5MX0.6NOhezpuI8Ib-YzJi1vM1DxypN3jCJ58fBC-YxphMxQ'
         self.client = APIClient()
 

@@ -8,7 +8,7 @@ class TestProfile(APITestCase):
     def setUp(self):
         self.register_url = '/api/users/'
         self.login_url = '/api/users/login/'
-        self.get_bookmark = '/api/bookmarks'
+        self.get_bookmark = '/api/bookmarks/'
         self.post_bookmark = '/api/bookmarks/how_to_train_your_dragon'
         self.post_bookmark2 = '/api/bookmarks/how_to_train_your_dragon_'
         self.delete_bookmark = '/api/bookmarks/how_to_train_your_dragon/delete'
@@ -50,6 +50,7 @@ class TestProfile(APITestCase):
         self.assertEqual(self.response.status_code, 201)
         response = self.client.post(
             self.post_bookmark, **headers, format="json")
+        
         self.assertEqual(response.status_code, 200)
         response = self.client.post(
             self.post_bookmark2, **headers, format="json")

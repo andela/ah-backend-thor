@@ -11,6 +11,8 @@ __pycache__/
 
 .editorconfig
 # Distribution / packaging
+.vscode/
+.vscode/settings.json
 .Python
 env/
 build/
@@ -106,6 +108,7 @@ db.sqlite3
 
 # migrations
 migrations
+migrations/
 # authors/apps/authentication/migrations
 
 # authors/apps/authentication/migrations/

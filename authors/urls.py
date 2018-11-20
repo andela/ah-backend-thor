@@ -1,5 +1,4 @@
 """authors URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1.2/topics/http/urls/
 Examples:
@@ -52,7 +51,7 @@ urlpatterns = [
                           'authors.apps.profiles'), namespace='profiles')),
     path('api/favorite/', include(('authors.apps.favorite.urls',
                                    'authors.apps.favorite'), namespace='favorite')),
-    path('api/bookmarks', include(('authors.apps.bookmarks.urls',
+    path('api/bookmarks/', include(('authors.apps.bookmarks.urls',
                           'authors.apps.bookmarks'), namespace='bookmarks'))
 
 ]

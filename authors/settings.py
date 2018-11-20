@@ -63,8 +63,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.google',
     'authors.apps.articles',
-    'authors.apps.favorite',
-    'authors.apps.bookmarks'
+    'authors.apps.favorite'
 ]
 TAGGIT_CASE_INSENSITIVE = True
 
@@ -117,10 +116,10 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ah_backend' or 'dcmdhglo8tdcjp',
-        'USER': 'postgres' or 'bbnwhxoooyqlyt',
-        'PASSWORD': '' or 'sudo' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
-        'HOST': 'localhost' or 'ec2-107-22-164-225.compute-1.amazonaws.com',
+        'NAME': 'ah_backend' or 'd8oc2435np9a8b',
+        'USER': 'postgres' or 'vrisihssqtbwrj',
+        'PASSWORD': '' or 'kegz' or 'sudo' or os.getenv("HEROKU_PASSWORD"),
+        'HOST': 'localhost' or 'ec2-54-235-193-0.compute-1.amazonaws.com',
         'PORT': '5432',
     },
 }
@@ -168,7 +167,6 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:4000',
 )
 SENDGRID_API_KEY = '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'
-
 AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {

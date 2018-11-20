@@ -1,5 +1,9 @@
-from .imports import *
-from .article_views import GetArticleBySlugApiView
+
+
+from .view_imports import *
+
+from .article_views import (ArticlesFilterSet, ReportArticlesView, LikeArticlesView,
+                            GetArticleBySlugApiView)
 
 
 def article_instance(param):
@@ -112,11 +116,9 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
         if isinstance(author_id, int):
             user = User.objects.get(id=author_id)
             if author_id != article.author.id:
-                raise APIException(
-                    {
-                        "error": f"Only article author {user.username} can update this article!"
-                    }
-                )
+                raise APIException({
+                    'error': f'Only article author {user.username} can update this article!'
+                })
             else:
                 new_article = {
                     'slug': article.slug,
@@ -149,13 +151,11 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
             article_id = article.id
 
             if author_id != article.author.id:
-                raise APIException(
-                    {
-                        "error": f"Only article author {user.username} can update this article!"
-                    }
-                )
+                raise APIException({
+                    'error': f'Only article author {user.username} can update this article!'
+                })
             else:
-                msg = {"success": f"Article with id: {article_id} deleted!"}
+                msg = {'success': f'Article with id: {article_id} deleted!'}
                 article.delete()
                 return Response(msg, status=status.HTTP_200_OK)
         return author_id
@@ -190,22 +190,16 @@ class RateCreateAPIView(generics.CreateAPIView):
                 {
                     "message": "You can not rate your article"
                 },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+                status=status.HTTP_400_BAD_REQUEST)
 
         serializer = self.serializer_class(
-            data={
-                "rate": self.rate, "user": user_id,
-                "article": queried_article.id
-            }
-        )
+            data={"rate": self.rate, "user": user_id, 'article': queried_article.id})
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         return Response(
             {
-                "slug": queried_article.slug,
-                "rating_details": serializer.data
+                "slug": queried_article.slug, "rating_details": serializer.data
             },
             status=status.HTTP_200_OK)
 
@@ -241,7 +235,6 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
         except:
             return Response(
                 {
-                    "slug": queried_article.slug,
-                    "average_ratings": 0
-                },
+                    "slug":queried_article.slug,"average_ratings": 0
+                    },
                 status=status.HTTP_200_OK)
