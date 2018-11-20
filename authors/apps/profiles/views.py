@@ -10,7 +10,7 @@ from .renderers import ProfileRenderer
 from authors.apps.authentication.models import User
 from rest_framework.permissions import IsAuthenticated
 from django.views.generic.edit import UpdateView
-from authors.apps.authentication.backends import JWTAuthentication
+from authors.apps.authentication.backends import JWTAuthentication 
 from rest_framework.exceptions import APIException
 from django.conf import settings
 from authors.apps.articles.models import Article
@@ -32,8 +32,8 @@ class UserProfileRetrieveDetailAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         QuerySet = Profile.objects.filter(
-            profile_user__username=self.kwargs["profile_username"])
-        return QuerySet
+            profile_user__username=self.kwargs["profile_username"])  # pragma: no cover
+        return QuerySet  # pragma: no cover
 
     renderer_classes = (ProfileRenderer,)
     serializer_class = UserProfileSerializer
@@ -110,7 +110,7 @@ class FollowUserCreateAPIView(generics.CreateAPIView):
                 author=followed_user_id)
 
             for article in followed_user_articles:
-                serializer_article = self.serializer_classarticle(article)
+                serializer_article = self.serializer_classarticle(article) # pragma: no cover
 
             return Response({
                 "following_user": following_username,

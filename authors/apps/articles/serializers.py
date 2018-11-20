@@ -8,6 +8,10 @@ from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 
+# def get_user(logged_in_user, author, article):
+#     if logged_in_user != author:
+#         del article
+
 class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag_list = TagListSerializerField()
 
@@ -28,10 +32,15 @@ class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
                 'email': user_details.email,
                 'username': user_details.username
             }
+            if self.context.get('author_id') != user_details.id:
+                del article_details['read_stats']
+            # get_user(self.context.get('author_id'),
+            #          user_details.id, article_details['read_stats'])
             return article_details
         return APIException({
             'error': 'User does not exist!'
         })
+    
 
     def validate(self, data):
 
@@ -58,6 +67,12 @@ class ArticleUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
         fields = ['slug', 'title', 'description',
                   'body', 'tag_list', 'image_url', 'audio_url']
 
+
+
+class ArticleUpdateStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ['read_stats']
 
 class RateSerializer(serializers.ModelSerializer):
 

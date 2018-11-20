@@ -18,6 +18,7 @@ class Article(models.Model):
     audio_url = models.URLField(blank=True, null=True)
     read_time = models.CharField(max_length=100, blank=False)
     fav_user = models.ManyToManyField(User, related_name='fav_users')
+    read_stats = models.IntegerField(default=0)
     bookmarks = models.ManyToManyField(User, related_name="user_bookmarks")
 
     def __str__(self):

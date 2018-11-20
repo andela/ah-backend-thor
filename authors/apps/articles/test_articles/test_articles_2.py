@@ -44,26 +44,28 @@ class TestArticles(ArticlesTest):
         self.assertEqual('Only judme29 can edit this!', res.data['error'])
 
 
-    def test_user_can_post_article(self):
+    def test_user_can_post_articl(self):
         self.assertEqual(self.response4.status_code, 201)
         self.assertIn('id', self.response4.data)
         self.assertIn('slug', self.response4.data)
         self.assertIn('body', self.response4.data)
 
-    def test_user_can_get_article(self):
+    def test_user_can_get_articl(self):
         self.assertEqual(self.response3.status_code, 200)
 
-    def test_user_can_get_article_byId(self):
+    def test_user_can_get_article_byI(self):
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
-
         num = dict(resp.data)['id']
-
         response5 = self.client.get(
+            f'{articles_url}{num}', **self.headers, format='json')
+        response6 = self.client.get(
             f'{articles_url}{num}', format='json')
-
+        
         self.assertEqual(response5.status_code, 200)
         self.assertTrue(isinstance(response5.data, ReturnDict))
+        self.assertEqual(response6.status_code, 200)
+        self.assertTrue(isinstance(response6.data, ReturnDict))
 
     def test_user_post_badTitle(self):
         resp = self.client.post(
@@ -82,11 +84,11 @@ class TestArticles(ArticlesTest):
         self.assertEqual(self.response6.status_code, 200)
         self.assertTrue(isinstance(self.response6.data, ReturnDict))
 
-    def test_user_can_delete_article(self):
+    def test_user_can_delete_articl(self):
 
         resp = self.client.post(
             articles_url, self.article, **self.headers, format='json')
-
+        
         num = dict(resp.data)['id']
         res = self.client.delete(
             f'{articles_url}{num}', **self.headers, format='json')
