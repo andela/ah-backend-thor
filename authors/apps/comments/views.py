@@ -56,15 +56,17 @@ class CommentLike(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         '''enables one to post a like  to a comment'''
         user = request.user
+        current_user = User.objects.filter(email=user).first()
+        user_id = current_user.id
         _id = kwargs['pk']
-        if CommentsLikeDislike.objects.filter(like=True) and CommentsLikeDislike.objects.filter(users_id=_id):
+        if CommentsLikeDislike.objects.filter(like=True) and \
+                CommentsLikeDislike.objects.filter(users_id=user_id):
             raise NotAcceptable(
                 {"detail": "You have already like the comment"}, {"code": 401})
         like_data = request.data.get("like", {})
         serializer = self.serializer_class(data=like_data)
         serializer.is_valid(raise_exception=True)
         comment = Comments.objects.filter(id=_id).first()
-        current_user = User.objects.filter(email=user).first()
         serializer.save(comment=comment, users=current_user)
         return response.Response({'message': 'Comment liked',
                                   'comment_like': serializer.data},
