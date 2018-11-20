@@ -115,7 +115,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ah_backend' or 'dcmdhglo8tdcjp',
         'USER': 'postgres' or 'bbnwhxoooyqlyt',
-        'PASSWORD': '' or 'kegz' or 'sudo' or os.getenv("HEROKU_PASSWORD"),
+        'PASSWORD': '' or 'sudo' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
         'HOST': 'localhost' or 'ec2-107-22-164-225.compute-1.amazonaws.com',
         'PORT': '5432',
     },

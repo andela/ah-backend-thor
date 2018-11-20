@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.vscode/
 
 #ignore migrations
 # migrations/
@@ -11,6 +12,7 @@ __pycache__/
 .editorconfig
 # Distribution / packaging
 .vscode/
+.vscode/settings.json
 .Python
 env/
 build/

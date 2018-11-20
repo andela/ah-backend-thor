@@ -19,8 +19,18 @@ omit =
     *authors/wsgi*
     *manage.py
     *serializers.py
-    *utils.py
-    *renderers.py
+    *utils.py*
+    *renderers.py*
     *favorite/apps*
-    
+    *like_articles*
+    *article_filters*
+    *signals*
+    *imports*
+    *share_articles*
+    *test_bookmarks*
+    *exceptions*
+    *test_favorite*
+    *test_profile*
+    *article_views*
+
 show_missing= True

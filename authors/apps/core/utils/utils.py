@@ -1,6 +1,8 @@
 import jwt
 from rest_framework.exceptions import APIException
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
+
 
 
 class Utils:

@@ -17,6 +17,7 @@ class Article(models.Model):
     audio_url = models.URLField(blank=True, null=True)
     read_time = models.CharField(max_length=100, blank=False)
     fav_user = models.ManyToManyField(User, related_name='fav_users')
+    read_stats = models.IntegerField(default=0)
     bookmarks = models.ManyToManyField(User, related_name="user_bookmarks")
 
     def __str__(self):
@@ -33,6 +34,7 @@ class Rate(models.Model):
     def __repr__(self):
         return self.rate
 
+
 class LikeArticle(models.Model):
     like = 'like'
     dislike = 'dislike'
@@ -40,7 +42,6 @@ class LikeArticle(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     like_status = models.CharField(max_length=9, choices=choices)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
 
     def __str__(self):
         return self.like_status

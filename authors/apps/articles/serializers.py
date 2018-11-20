@@ -8,6 +8,10 @@ from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 
+# def get_user(logged_in_user, author, article):
+#     if logged_in_user != author:
+#         del article
+
 class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
     tag_list = TagListSerializerField()
 
@@ -28,6 +32,10 @@ class ArticleSerializer(TaggitSerializer, serializers.ModelSerializer):
                 'email': user_details.email,
                 'username': user_details.username
             }
+            if self.context.get('author_id') != user_details.id:
+                del article_details['read_stats']
+            # get_user(self.context.get('author_id'),
+            #          user_details.id, article_details['read_stats'])
             return article_details
         return APIException({
             'error': 'User does not exist!'
@@ -55,6 +63,12 @@ class ArticleUpdateSerializer(TaggitSerializer, serializers.ModelSerializer):
         model = Article
         fields = ['slug', 'title', 'description',
                   'body', 'tag_list', 'image_url', 'audio_url']
+
+
+class ArticleUpdateStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ['read_stats']
 
 
 class RateSerializer(serializers.ModelSerializer):
@@ -92,6 +106,7 @@ class RateSerializer(serializers.ModelSerializer):
         rate = Rate.objects.create(**validated_data)
         return rate
 
+
 class ArticleLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = LikeArticle
@@ -99,7 +114,8 @@ class ArticleLikeSerializer(serializers.ModelSerializer):
 
     def to_representation(self, data):
         '''Show like details'''
-        like_details = super(ArticleLikeSerializer, self).to_representation(data)
+        like_details = super(ArticleLikeSerializer,
+                             self).to_representation(data)
         if User.objects.filter(pk=like_details['user']).exists():
             user_details = User.objects.get(pk=like_details['user'])
             like_details['user'] = user_details.username
@@ -107,6 +123,7 @@ class ArticleLikeSerializer(serializers.ModelSerializer):
         return APIException({
             'error': 'User does not exist'
         })
+
 
 class ArticleLikesUpdateSerializer(serializers.ModelSerializer):
     class Meta:

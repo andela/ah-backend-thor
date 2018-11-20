@@ -1,10 +1,23 @@
 from .imports import *
-from .article_views import ArticlesFilterSet, LikeArticlesView
+from .article_views import ArticlesFilterSet, LikeArticlesView, GetArticleBySlugApiView
 
 
 def article_instance(param):
     query_article = Article.objects.get(slug=param)
     return query_article
+
+
+class ArticlesFilterSet(FilterSet):
+    '''Filters articles based on author_name,title and tags of articles'''
+    tags = filters.CharFilter(field_name='tag_list', method='get_tags')
+    title = filters.CharFilter()
+
+    def get_tags(self, queryset, name, value):
+        return queryset.filter(tag_list__name__contains=value)  # pragma: no cover
+
+    class Meta():
+        model = Article
+        fields = ['title', 'author__username', 'tags']
 
 
 class ArticlesListCreateAPIView(generics.ListCreateAPIView):
@@ -16,10 +29,8 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
     filter_class = ArticlesFilterSet
 
     def create(self, request, *args, **kwargs):
-
         article = request.data.get("article")
         util = Utils()
-
         try:
             title = article['title']
             description = article['description']
@@ -32,7 +43,6 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
         except Exception as exception:
             raise APIException(
                 {"error": f"Required field: {str(exception)} missing!"})
-
         author_id = util.get_token(request)
         if isinstance(author_id, int):
             # create unique slug with only alphanumeric characters and dashes for spaces
@@ -42,7 +52,6 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
                     slug += word
                 elif word.isspace():
                     slug += "_"
-
             # make slug unique with timestamp if slug already eists
             if Article.objects.filter(slug=slug).exists():
                 slug += str(time.time()).replace('.', '')
@@ -65,12 +74,34 @@ class ArticlesListCreateAPIView(generics.ListCreateAPIView):
 
 
 class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     renderer_class = ArticlesRenderer
-    permission_classes = (permissions.AllowAny,)
-    lookup_field = "pk"
+    permission_classes = (permissions.AllowAny, )
+    lookup_field = 'pk'
+
+    def get(self, request, *args, **kwargs):
+        article = Article.objects.get(id=kwargs['pk'])
+        article_ = request.data.get('article')
+        util = Utils()
+        try:
+            author_id = util.get_token(request)
+        except:
+            author_id = 0
+        if author_id != article.author.id:
+            read_stats = article.read_stats
+            read_stats += 1
+            new_article = {
+                'read_stats': read_stats
+            }
+            serializer = ArticleUpdateStatsSerializer(
+                data=new_article)
+            serializer.is_valid(raise_exception=True)
+            serializer.update(article, new_article)
+        return Response(
+            self.serializer_class(
+                article, context={'author_id': author_id}).data,
+            status=status.HTTP_200_OK)
 
     def patch(self, request, *args, **kwargs):
         article = Article.objects.get(id=kwargs["pk"])
@@ -130,14 +161,6 @@ class RetrieveUpdateArticleByIdApiView(generics.RetrieveUpdateDestroyAPIView):
         return author_id
 
 
-class GetArticleBySlugApiView(generics.RetrieveAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-    renderer_class = ArticlesRenderer
-    permissiion_classes = (permissions.AllowAny,)
-    lookup_field = "slug"
-
-
 class RateCreateAPIView(generics.CreateAPIView):
     permission_class = permissions.IsAuthenticatedOrReadOnly
     serializer_class = RateSerializer
@@ -193,18 +216,13 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
 
     def get_queryset(self, *args, **kwargs):
         """ Returns the rating objects for a particular aricle"""
-
         slug = self.kwargs.get(self.look_url_kwarg)
-
         queried_article = article_instance(slug)
-
         queryset = Rate.objects.filter(article=queried_article.id)
-
         return queryset
 
     def retrieve(self, request, *args, **kwargs):
         """ Returns tghe average of an article's ratings"""
-
         slug = self.kwargs.get(self.look_url_kwarg)
         query = self.get_queryset(self.look_url_kwarg)
         total_count = query.count()
@@ -216,7 +234,6 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
             total_rates += rated
         try:
             av_rating = total_rates / total_count
-
             return Response(
                 {
                     "slug": queried_article.slug, "average_ratings": round(av_rating, 0)
