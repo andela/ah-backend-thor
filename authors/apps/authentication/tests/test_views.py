@@ -79,9 +79,9 @@ class TestPoll(APITestCase):
     def test_login_un_registered_user(self):
         '''Test logging in an unregistered user '''
         response = self.client.post(self.login_url, self.user, format='json')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
         self.assertIn('A user with this email and password was not found',
-                      response.data['errors']['error'][0])
+                      response.data['errors'])
 
     def test_user_login(self):
         '''Test registering a User and logging them in '''
