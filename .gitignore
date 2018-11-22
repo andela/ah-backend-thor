@@ -105,15 +105,6 @@ db.sqlite3
 .vscode/
 
 
-
-# migrations
-migrations
-migrations/
-# authors/apps/authentication/migrations
-
-# authors/apps/authentication/migrations/
-
-
 .DS_Store
 
 # editor config

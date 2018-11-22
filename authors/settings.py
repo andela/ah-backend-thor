@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1.2to/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRETE_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -120,10 +120,10 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ah_backend' or 'd8oc2435np9a8b',
-        'USER': 'postgres' or 'vrisihssqtbwrj',
-        'PASSWORD': '' or 'sudo' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
-        'HOST': 'localhost' or 'ec2-54-235-193-0.compute-1.amazonaws.com',
+        'NAME': 'ah_backend' or 'd7qr67ul45s36q',
+        'USER': 'postgres' or 'eygobqhgfwnzvh',
+        'PASSWORD': '' or 'kegz' or 'sudo' or os.getenv("HEROKU_PASSWORD"),
+        'HOST': 'localhost' or 'ec2-54-204-36-249.compute-1.amazonaws.com',
         'PORT': '5432',
     },
 }

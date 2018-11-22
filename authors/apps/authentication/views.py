@@ -78,10 +78,10 @@ class LoginAPIView(generics.CreateAPIView):
         # anything to save. Instead, the `validate` method on our serializer
         # handles everything we need.
         try:
+            
             username = User.objects.get(email=user["email"]).username
         except:
-            message = {
-                'errors': 'A user with this email and password was not found'}
+            message = {'errors': 'A user with this email or password was not found !'}
             return Response(message, status=status.HTTP_404_NOT_FOUND)
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
