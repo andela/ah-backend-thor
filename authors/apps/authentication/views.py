@@ -53,10 +53,10 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         subject = "Hi {}".format(serializer.data['username'])
-        # body = "click this link to verify your account   https://ah-backend-thor.herokuapp.com/api/users/update/{}".format(
-        #     serializer.data['token'])
-        body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(
+        body = "click this link to verify your account   https://ah-backend-thor.herokuapp.com/api/users/update/{}".format(
             serializer.data['token'])
+        # body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(
+        #     serializer.data['token'])
         email = serializer.data['email']
         send_mail(subject, body, os.getenv("EMAIL"),
                   [email], fail_silently=False)
@@ -77,10 +77,16 @@ class LoginAPIView(generics.CreateAPIView):
         # the registration endpoint. This is because we don't actually have
         # anything to save. Instead, the `validate` method on our serializer
         # handles everything we need.
+        try:
+            username = User.objects.get(email=user["email"]).username
+        except:
+            message = {'errors': 'A user with this email and password was not found'}
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         message = {
             'user_message': "User successfully confirmed",
+            "username": username,
             'user_token': serializer.data['token']
         }
         return Response(message, status=status.HTTP_200_OK)
