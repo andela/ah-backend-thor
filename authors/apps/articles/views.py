@@ -14,14 +14,22 @@ def article_instance(param):
 class ArticlesFilterSet(FilterSet):
     '''Filters articles based on author_name,title and tags of articles'''
     tags = filters.CharFilter(field_name='tag_list', method='get_tags')
-    title = filters.CharFilter()
+    title = filters.CharFilter(field_name='title', method='get_title')
+    author_name = filters.CharFilter(
+        field_name='author__username', method='get_author_name')
 
     def get_tags(self, queryset, name, value):
-        return queryset.filter(tag_list__name__contains=value)  # pragma: no cover
+        return queryset.filter(tag_list__name__icontains=value)  # pragma: no cover
+
+    def get_title(self, queryset, name, value):
+        return queryset.filter(title__icontains=value)  # pragma: no cover
+
+    def get_author_name(self, queryset, name, value):
+        return queryset.filter(author__username__icontains=value)  # pragma: no cover
 
     class Meta():
         model = Article
-        fields = ['title', 'author__username', 'tags']
+        fields = ['title', 'tags', ]
 
 
 class ArticlesListCreateAPIView(generics.ListCreateAPIView):
@@ -235,6 +243,6 @@ class RateRetrieveAPIView(generics.RetrieveAPIView):
         except:
             return Response(
                 {
-                    "slug":queried_article.slug,"average_ratings": 0
-                    },
+                    "slug": queried_article.slug, "average_ratings": 0
+                },
                 status=status.HTTP_200_OK)
