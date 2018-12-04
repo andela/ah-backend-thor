@@ -89,6 +89,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+#Add Cors support
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
 ROOT_URLCONF = 'authors.urls'
 
 TEMPLATES = [
@@ -118,7 +122,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ah_backend' or 'd8oc2435np9a8b',
         'USER': 'postgres' or 'vrisihssqtbwrj',
-        'PASSWORD': '' or 'kegz' or 'sudo' or os.getenv("HEROKU_PASSWORD"),
+        'PASSWORD': '' or 'sudo' or 'kegz' or os.getenv("HEROKU_PASSWORD"),
         'HOST': 'localhost' or 'ec2-54-235-193-0.compute-1.amazonaws.com',
         'PORT': '5432',
     },
