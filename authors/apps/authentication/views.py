@@ -168,6 +168,7 @@ class PasswordUpdateAPIView(generics.UpdateAPIView):
 
         if not new_password:
             return Response({"message": "Please fill in your password"}, status=status.HTTP_400_BAD_REQUEST)
+            
         if len(new_password) < 8:
             return Response({"message": 'The password is short. It should be more than 8 characters'})
         try:
