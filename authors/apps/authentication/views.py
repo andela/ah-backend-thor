@@ -30,8 +30,10 @@ import facebook
 
 
 def generate_password_reset_token(data):
+    exp_date = datetime.now() + timedelta(days=60)
     token = jwt.encode({
-        'email': data
+        'email': data,
+        'exp': int(exp_date.strftime('%s'))
     }, settings.SECRET_KEY, algorithm='HS256')
 
     return token.decode('utf-8')
@@ -53,7 +55,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         subject = "Hi {}".format(serializer.data['username'])
-        body = "click this link to verify your account   https://ah-backend-thor.herokuapp.com/api/users/update/{}".format(
+        body = "click this link to verify your account https://ah-backend-thor.herokuapp.com/api/users/update/{}".format(
             serializer.data['token'])
         # body = "click this link to verify your account   http://localhost:8000/api/users/update/{}".format(
         #     serializer.data['token'])
@@ -80,7 +82,8 @@ class LoginAPIView(generics.CreateAPIView):
         try:
             username = User.objects.get(email=user["email"]).username
         except:
-            message = {'errors': 'A user with this email and password was not found'}
+            message = {
+                'errors': 'A user with this email and password was not found'}
             return Response(message, status=status.HTTP_404_NOT_FOUND)
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
@@ -137,7 +140,7 @@ class SendPasswordResetEmailAPIView(generics.CreateAPIView):
 
             token = generate_password_reset_token(user_data)
 
-            link = "https://ah-backend-thor.herokuapp.com/api/users/update_password/{}".format(
+            link = "https://frontend-thor-react.herokuapp.com/update_password?token={}".format(
                 token)
             serializer_data = self.serializer_class(user)
             from_email = os.getenv("EMAIL")
