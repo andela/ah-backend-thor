@@ -27,7 +27,7 @@ class ShareArticleViaEmailAPIView(generics.CreateAPIView):
             Article.objects.get(slug=slug)
 
             # get email from authentication to send to
-            link = "https://ah-frontend-thor.herokuapp.com/display/{}".format(
+            link = "https://frontend-thor-react.herokuapp.com/display/{}".format(
                 slug)
 
             from_email = os.getenv("EMAIL")
@@ -59,9 +59,7 @@ class ShareArticleViaFacebookAPIView(generics.CreateAPIView):
         try:
             Article.objects.get(slug=slug)
             base_url = "https://www.facebook.com/sharer/sharer.php?u="
-
-            heroku_link = "https://ah-frontend-thor.herokuapp.com/display/{}".format(
-
+            heroku_link = "https://frontend-thor-react.herokuapp.com/display/{}".format(
                 slug
             )
             url_link = base_url + heroku_link
@@ -93,9 +91,7 @@ class ShareArticleViaTwitterAPIView(generics.CreateAPIView):
 
             url_link = (
                 base_url
-
-                + "{0}%20https://ah-frontend-thor.herokuapp.com/display/{1}".format(
-
+                + "{0}%20https://frontend-thor-react.herokuapp.com/display/{1}".format(
                     data, slug
                 )
             )
