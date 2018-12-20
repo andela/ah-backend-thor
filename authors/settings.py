@@ -231,3 +231,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded_files')
 MEDIA_URL = '/media/'
 
 REST_USE_JWT = True
+
+CORS_ORIGIN_ALLOW_ALL = True

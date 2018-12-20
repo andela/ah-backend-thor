@@ -59,7 +59,7 @@ class ShareArticleViaFacebookAPIView(generics.CreateAPIView):
         try:
             Article.objects.get(slug=slug)
             base_url = "https://www.facebook.com/sharer/sharer.php?u="
-            heroku_link = "https://ah-backend-thor.herokuapp.com/api/articles/{}".format(
+            heroku_link = "http://localhost:8080/display/{}".format(
                 slug
             )
             url_link = base_url + heroku_link
@@ -91,7 +91,7 @@ class ShareArticleViaTwitterAPIView(generics.CreateAPIView):
 
             url_link = (
                 base_url
-                + "{0}%20https://ah-backend-thor.herokuapp.com/api/articles/{1}".format(
+                + "{0}%20http://localhost:8080/display/{1}".format(
                     data, slug
                 )
             )
